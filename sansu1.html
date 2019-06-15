@@ -23,7 +23,7 @@ select {
 
 #problem{
   position: relative;
-  height: 300px;
+  height: 200px;
 }
 
 .num {
@@ -62,18 +62,17 @@ select {
   font-size: 100px;
 }
 #result {
-  left: 72%;
-  width: 25%;
+  left: 70%;
 
-  width: 200px;
+  width: 260px;
   font-size: 120px;
 }
 
-.answer1 {
+.input1 {
   background-color: #EEE;
   border-right: solid 3px gray;
 }
-.answer0 {
+.input0 {
   background-color: #EEE;
 }
 
@@ -84,7 +83,8 @@ select {
 
 .button {
 
-  padding: 5px;
+  padding: 4px;
+  margin: 2px
 
   height: 100px;
   width: 100px;
@@ -99,7 +99,7 @@ select {
 
   color: white;
   border-radius: 20px;
-  text-shadow: 5px 5px #555;
+  text-shadow: 5px 5px gray;
 
   background-image:-moz-linear-gradient(
   top,
@@ -111,6 +111,27 @@ select {
   from(#ffa035),
   to(#ff8300));
 }
+.button:hover {
+  text-shadow: 5px 5px black;
+
+  background-image:-moz-linear-gradient(
+  top,
+  #ef9025 0%,
+  #ef7300);
+
+  background-image:-webkit-gradient(
+  linear,left top,left bottom,
+  from(#ef9025),
+  to(#ef7300));
+}
+
+.OK{
+  position: absolute;
+  top: 5%;
+  left: 20%;
+  z-index: 1000;
+
+}
 
 
 </style>
@@ -118,18 +139,17 @@ select {
 <!--
 
 var mode = "+";//足し算,引き算
-var limit = 1000;//数字の上限。０は制限なし
-var answerClass = 1;
+var limit = 10;//数字の上限。０は制限なし
+var inputClass = 1;
 
 function init(){
   $("#select_limit").change(setlimit);
   $("#select_mode").change(setmode);
 
   setInterval(()=>{
-    let nextAnswerClass = (answerClass + 1) % 2;
-    //console.log(answerClass +", next:"+ nextAnswerClass);
-    $(".answer"+answerClass).removeClass("answer"+answerClass).addClass("answer"+nextAnswerClass);
-    answerClass = nextAnswerClass;
+    let nextInputClass = (inputClass + 1) % 2;
+    $(".input"+inputClass).removeClass("input"+inputClass).addClass("input"+nextInputClass);
+    inputClass = nextInputClass;
 
   },900);
 
@@ -144,8 +164,67 @@ function setNewProblem(){
   let operand2 = parseInt((random * limit)) % limit;
   //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
 
+  if(operand1 == 0){
+    operand1 = 1;
+  }
+  if(operand2 == 0){
+    operand2 = 1;
+  }
+
   $("#operand1").text(operand1);
   $("#operand2").text(operand2);
+  $("#result").html("&nbsp;");
+}
+
+function setNum(n){
+  let num = $("#result").html();
+  num = num.replace(/&nbsp;/,"");
+  if( String(num).length == 0 && n == 0 ){
+  }else if( String(num).length < 3 ){
+    $("#result").text(num + n);
+  }
+
+  checkCalc();
+}
+function setBackSpace(){
+  let num = $("#result").html();
+  num = num.replace(/&nbsp;/,"");
+  if( String(num).length == 0 || String(num).length == 1 ){
+    $("#result").html("&nbsp;");
+  }else{
+    $("#result").text(num.slice(0,-1));
+  }
+}
+
+function checkCalc(){
+  let operand1 = parseInt($("#operand1").text());
+  let operand2 = parseInt($("#operand2").text());
+  let result = parseInt($("#result").text());
+
+  if(mode == "+"){
+    try{
+      if( (operand1 + operand2) == result){
+        //console.log("OK");
+        $("#ok").css("display","block");
+        setTimeout(()=>{
+          $("#ok").css("display","none");
+          setNewProblem();
+        },2000);
+      }else{
+        //console.log("NG");
+      }
+    }catch(e){
+    }
+  }else if(mode == "-"){
+    try{
+      if( (operand1 - operand2) == result){
+        //console.log("OK");
+      }else{
+        //console.log("NG");
+      }
+    }catch(e){
+    }
+  }
 }
 
 function setlimit(){
@@ -207,27 +286,26 @@ function setmode(){
        ＝ 
       </div>
 
-      <div class="num answer1 calc" align="right" id="result">
-        0
-      </div>
+      <div class="num input1 calc" align="right" id="result">&nbsp;</div>
 
     </div>
 
     <div id="number">
-      <span class="button" id="n0">0</span>
-      <span class="button" id="n1">1</span>
-      <span class="button" id="n2">2</span>
-      <span class="button" id="n3">3</span>
-      <span class="button" id="n4">4</span>
-      <span class="button" id="n5">5</span>
-      <span class="button" id="n6">6</span>
-      <span class="button" id="n7">7</span>
-      <span class="button" id="n8">8</span>
-      <span class="button" id="n9">9</span>
-      <span class="button" id="nbs">C</span>
+      <span class="button" onclick="setNum(0)">0</span>
+      <span class="button" onclick="setNum(1)">1</span>
+      <span class="button" onclick="setNum(2)">2</span>
+      <span class="button" onclick="setNum(3)">3</span>
+      <span class="button" onclick="setNum(4)">4</span>
+      <span class="button" onclick="setNum(5)">5</span>
+      <span class="button" onclick="setNum(6)">6</span>
+      <span class="button" onclick="setNum(7)">7</span>
+      <span class="button" onclick="setNum(8)">8</span>
+      <span class="button" onclick="setNum(9)">9</span>
+      <span class="button" onclick="setBackSpace()">C</span>
     </div>
 
   </div>
+  <div id="ok" class="OK" style="display:none;"><img src="./maru.png"></div>
 
 </BODY>
 </html>

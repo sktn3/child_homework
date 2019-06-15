@@ -10,6 +10,22 @@
   crossorigin="anonymous"></script>
 
 <style type="text/css">
+body {
+  width: 100%;
+}
+body.fixed{
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+
 #contener {
   position:absolute;
   top: 5%;
@@ -21,10 +37,20 @@ select {
   font-size: 24px;
 }
 
+#startTime {
+  font-size: 16px;
+
+}
+
 #problem{
   position: relative;
   height: 200px;
 }
+#problem{
+  position: relative;
+  height: 200px;
+}
+
 
 .num {
   text-align: right;
@@ -138,11 +164,21 @@ select {
 <SCRIPT type="text/javascript">
 <!--
 
-var mode = "+";//足し算,引き算
-var limit = 10;//数字の上限。０は制限なし
+var mode = "+";//足し算,引き算 + or -
+var limit = 5;//数字の上限。０は制限なし
 var inputClass = 1;
 
 function init(){
+  var scrollOff = function( e ){
+	  e.preventDefault();
+  }
+  // スクロールをキャンセル
+  document.addEventListener( 'touchmove',scrollOff, false);
+  document.addEventListener( 'scroll',scrollOff, false);
+
+
+  setStartTime();
+
   $("#select_limit").change(setlimit);
   $("#select_mode").change(setmode);
 
@@ -156,7 +192,39 @@ function init(){
   setNewProblem();
 }
 
+function setStartTime(){
+  let yobi= new Array("日","月","火","水","木","金","土");
+
+  let d=new Date();
+
+  //年・月・日・曜日を取得する
+  let year = d.getFullYear();
+  let month = d.getMonth()+1;
+  let week = d.getDay();
+  let day = d.getDate();
+
+  //時・分・秒を取得する
+  let hour = d.getHours();
+  let minute = d.getMinutes();
+  let second = d.getSeconds();
+
+  $("#startTime").text(year+"年"+month+"月"+day+"日 "+yobi[week]+"曜日　"+hour+"時"+minute+"分"+second+"秒");
+}
+
+/*
+function setCount0(){
+  $("#count_num").text("0");
+}
+*/
+
+function setCountIncriment(){
+  //console.log($("#count_num").text());
+  $("#count_num").text( String(parseInt($("#count_num").text())+1) );
+}
+
 function setNewProblem(){
+  setCountIncriment();
+
   let random;
   random = Math.random();
   let operand1 = parseInt((random * limit)) % limit;
@@ -171,7 +239,8 @@ function setNewProblem(){
     operand2 = 1;
   }
 
-  if(mode == "-" && operand1 < operand2){
+  //if(mode == "-" && operand1 < operand2){
+  if(operand1 < operand2){
     $("#operand1").text(operand2);
     $("#operand2").text(operand1);
   }else{
@@ -239,12 +308,12 @@ function checkCalc(){
 }
 
 function setlimit(){
-  limit = parseInt($(this).val());
+  limit = parseInt($("#select_limit").val());
   setNewProblem();
 }
 
 function setmode(){
-  mode = $(this).val();
+  mode = $("#select_mode").val();
   if(mode == "-"){
     $("#operator").text("−");
 
@@ -259,12 +328,13 @@ function setmode(){
  
 </HEAD>
 
-<BODY onload="init()">
+<BODY class="fixed" onload="init()">
 <!-- ほげ -->
 
   <div id="contener">
     <div align="center">
       <select id="select_limit">
+        <option value="5">5まで</option>
         <option value="10">10まで</option>
         <option value="20">20まで</option>
         <option value="50">50まで</option>
@@ -277,10 +347,15 @@ function setmode(){
         <option value="+">足し算</option>
         <option value="-">引き算</option>
       </select>
+      <span id="startTime"></span>
     </div>
-
     <br/>
     <hr/>
+    <div id="count" align="center">
+      <span id="count_num">0</span>
+      問目
+    </div>
+
 
     <div id="problem">
       <div class="num calc" align="right" id="operand1">
@@ -313,6 +388,9 @@ function setmode(){
       <span class="button" onclick="setNum(8)">8</span>
       <span class="button" onclick="setNum(9)">9</span>
       <span class="button" onclick="setBackSpace()">C</span>
+      <!--
+      <span class="button" onclick="setNewProblem()">つぎ</span>
+      //!-->
     </div>
 
   </div>

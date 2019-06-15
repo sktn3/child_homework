@@ -1,30 +1,224 @@
 <!DOCTYPE html>
 <html lang="ja">
-<HTML><HEAD><TITLE>算数１</TITLE> 
+
+<HEAD>
+<TITLE>算数１</TITLE> 
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="x-ua-compatible" content="IE=10" > 
-<meta name="robots" content="noindex">
-<meta name="viewport" content="user-scalable=no"> 
 
-<link rel="shortcut icon" href="./favicon_work.ico" type="image/vnd.microsoft.ico"/>
+<script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  crossorigin="anonymous"></script>
 
+<style type="text/css">
+#contener {
+  position:absolute;
+  top: 5%;
+  left: 2%;
+  width: 98%;
+}
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+select {
+  font-size: 24px;
+}
 
-<style>
+input {
+ /*font-size : 100%;*/
+ font-size : 200px;
+}
+
+#problem{
+  position: relative;
+  height: 300px;
+}
+
+.num {
+  text-align: right;
+}
+.calc {
+  width: 300px;
+
+  font-size: 160px;
+  font-weight:bold;
+
+  position: absolute;
+}
+
+#operand1 {
+  left: 0%;
+}
+#operator {
+  left: 24%;
+}
+#operand2 {
+  left: 35%;
+}
+#equal {
+  left: 60%;
+}
+#result {
+  left: 72%;
+  width: 25%;
+}
+
+.answer1 {
+  background-color: #EEE;
+  border-right: solid 3px gray;
+}
+.answer0 {
+  background-color: #EEE;
+}
+
+#number{
+  position: relative;
+  text-align: center;
+}
+
+.button {
+
+  padding: 10px;
+
+  height: 100px;
+  width: 100px;
+
+  font-size: 90px;
+  font-weight: bold;
+
+  text-align: center;
+  text-decoration:none;
+
+  border: 5px solid white;
+
+  color: white;
+  border-radius: 20px;
+  text-shadow: 5px 5px #555;
+
+  background-image:-moz-linear-gradient(
+  top,
+  #ffa035 0%,
+  #ff8300);
+
+  background-image:-webkit-gradient(
+  linear,left top,left bottom,
+  from(#ffa035),
+  to(#ff8300));
+}
 
 
 </style>
 <SCRIPT type="text/javascript">
 <!--
 
+var mode = "+";//足し算,引き算
+var limit = 1000;//数字の上限。０は制限なし
+var answerClass = 1;
+
+function init(){
+  $("#select_limit").change(setlimit);
+  $("#select_mode").change(setmode);
+
+  setInterval(()=>{
+    let nextAnswerClass = (answerClass + 1) % 2;
+    //console.log(answerClass +", next:"+ nextAnswerClass);
+    $(".answer"+answerClass).removeClass("answer"+answerClass).addClass("answer"+nextAnswerClass);
+    answerClass = nextAnswerClass;
+
+  },900);
+
+  setNewProblem();
+}
+
+function setNewProblem(){
+  let random;
+  random = Math.random();
+  let operand1 = parseInt((random * limit)) % limit;
+  random = Math.random();
+  let operand2 = parseInt((random * limit)) % limit;
+  //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
+
+  $("#operand1").text(operand1);
+  $("#operand2").text(operand2);
+}
+
+function setlimit(){
+  limit = parseInt($(this).val());
+  setNewProblem();
+}
+
+function setmode(){
+  mode = $(this).val();
+  if(mode == "-"){
+    $("#operator").text("−");
+
+  }else{
+    $("#operator").text("＋");
+  }
+  setNewProblem();
+}
+
 //-->
 </SCRIPT>
  
 </HEAD>
 
-<BODY onload="">
+<BODY onload="init()">
 <!-- ほげ -->
 
+  <div id="contener">
+    <div align="center">
+      <select id="select_limit">
+        <option value="10">10まで</option>
+        <option value="20">20まで</option>
+        <option value="50">50まで</option>
+        <option value="100">100まで</option>
+        <option value="130">130まで</option>
+        <option value="1000">200まで</option>
+      </select>
+
+      <select id="select_mode">
+        <option value="+">足し算</option>
+        <option value="-">引き算</option>
+      </select>
+    </div>
+
+    <br/>
+    <hr/>
+
+    <div id="problem">
+      <div class="num calc" align="right" id="operand1">
+        0
+      </div>
+      
+      <div class="calc" id="operator"> ＋ </div>
+
+      <div class="num calc" align="right" id="operand2">
+        0
+      </div>
+
+      <div class="calc" id="equal">
+       ＝ 
+      </div>
+
+      <div class="num answer1 calc" align="right" id="result">
+        0
+      </div>
+
+    </div>
+
+    <div id="number">
+      <span class="button" id="n0">0</span>
+      <span class="button" id="n1">1</span>
+      <span class="button" id="n2">2</span>
+      <span class="button" id="n3">3</span>
+      <span class="button" id="n4">4</span>
+      <span class="button" id="n5">5</span>
+      <span class="button" id="n6">6</span>
+      <span class="button" id="n7">7</span>
+      <span class="button" id="n8">8</span>
+      <span class="button" id="n9">9</span>
+      <span class="button" id="nbs">C</span>
+    </div>
+
+  </div>
+
 </BODY>
-</HTML>
+</html>

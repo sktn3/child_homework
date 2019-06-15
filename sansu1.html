@@ -171,15 +171,21 @@ function setNewProblem(){
     operand2 = 1;
   }
 
-  $("#operand1").text(operand1);
-  $("#operand2").text(operand2);
+  if(mode == "-" && operand1 < operand2){
+    $("#operand1").text(operand2);
+    $("#operand2").text(operand1);
+  }else{
+    $("#operand1").text(operand1);
+    $("#operand2").text(operand2);
+  }
   $("#result").html("&nbsp;");
 }
 
 function setNum(n){
   let num = $("#result").html();
   num = num.replace(/&nbsp;/,"");
-  if( String(num).length == 0 && n == 0 ){
+  if( String(num).length == 1 && num == "0" ){
+    $("#result").text(n);
   }else if( String(num).length < 3 ){
     $("#result").text(num + n);
   }
@@ -209,7 +215,7 @@ function checkCalc(){
         setTimeout(()=>{
           $("#ok").css("display","none");
           setNewProblem();
-        },2000);
+        },1000);
       }else{
         //console.log("NG");
       }
@@ -219,6 +225,11 @@ function checkCalc(){
     try{
       if( (operand1 - operand2) == result){
         //console.log("OK");
+        $("#ok").css("display","block");
+        setTimeout(()=>{
+          $("#ok").css("display","none");
+          setNewProblem();
+        },1000);
       }else{
         //console.log("NG");
       }

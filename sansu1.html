@@ -168,6 +168,8 @@ var mode = "+";//足し算,引き算 + or -
 var limit = 5;//数字の上限。０は制限なし
 var inputClass = 1;
 
+var startTime;
+
 function init(){
   var scrollOff = function( e ){
 	  e.preventDefault();
@@ -187,6 +189,7 @@ function init(){
     $(".input"+inputClass).removeClass("input"+inputClass).addClass("input"+nextInputClass);
     inputClass = nextInputClass;
 
+    setElapsedTime();
   },900);
 
   setNewProblem();
@@ -196,6 +199,7 @@ function setStartTime(){
   let yobi= new Array("日","月","火","水","木","金","土");
 
   let d=new Date();
+  startTime = d;
 
   //年・月・日・曜日を取得する
   let year = d.getFullYear();
@@ -209,6 +213,16 @@ function setStartTime(){
   let second = d.getSeconds();
 
   $("#startTime").text(year+"年"+month+"月"+day+"日 "+yobi[week]+"曜日　"+hour+"時"+minute+"分"+second+"秒");
+}
+
+function setElapsedTime(){
+  let d=new Date();
+
+  let time = parseInt((d - startTime)/1000); 
+  let minute = ("0" +parseInt(time/60)).slice(-3);
+  let second = ("0" +time%60).slice(-2);
+  //console.log(minute +"分"+ second+ "秒");
+  $("#elapsedTime").text(minute +"分"+ second+ "秒");
 }
 
 /*
@@ -348,6 +362,7 @@ function setmode(){
         <option value="-">引き算</option>
       </select>
       <span id="startTime"></span>
+      （<span id="elapsedTime">00分00秒</span>）
     </div>
     <br/>
     <hr/>

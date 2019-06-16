@@ -85,16 +85,16 @@ select {
   font-size: 120px;
 }
 #equal {
-  left: 60%;
+  left: 55%;
   top: 20px;
 
   width: 100px;
   font-size: 100px;
 }
 #result {
-  left: 70%;
+  left: 65%;
 
-  width: 260px;
+  width: 300px;
   font-size: 120px;
 }
 
@@ -176,7 +176,7 @@ select {
 <!--
 
 var mode = "+";//足し算,引き算 + or -
-var limit = 5;//数字の上限。０は制限なし
+var limit = 1;//数字の上限。０は制限なし
 var inputClass = 1;
 
 var startTime;
@@ -203,6 +203,8 @@ function init(){
     setElapsedTime();
   },900);
 
+  limit = $("#select_limit").val();
+  mode = $("#select_mode").val();
   setNewProblem();
 }
 
@@ -252,25 +254,21 @@ function setNewProblem(){
   let operand1;
   let operand2;
 
-  for(let i=0; i<3; i++){
-    console.log("setNewProblem:"+i);
+  for(let i=0; i<15; i++){
+    console.log("setNewProblem(limit:"+limit+"):"+i);
     let random;
-    random = Math.random();
-    operand1 = parseInt((random * limit)) % limit;
-    random = Math.random();
-    operand2 = parseInt((random * limit)) % limit;
-    //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
 
-    if(operand1 == 0){
-      operand1 = 1;
-    }
-    if(operand2 == 0){
-      operand2 = 1;
-    }
+    random = Math.random();
+    console.log(random +", "+parseInt(random * String(limit).length * 10) );
+    operand1 = parseInt(random * String(limit).length * 10) % limit +1;
+
+    random = Math.random();
+    console.log(random +", "+parseInt(random * String(limit).length * 10) );
+    operand2 = parseInt(random * String(limit).length * 10) % limit +1;
+    //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
 
     let oldOperand1 = parseInt($("#operand1").text());
     let oldOperand2 = parseInt($("#operand2").text());
-
 
     //if(mode == "-" && operand1 < operand2){
     if(operand1 < operand2){
@@ -278,6 +276,7 @@ function setNewProblem(){
       operand1 = operand2;
       operand2 = tempOperand;
     }
+
     if(operand1 == oldOperand1 &&  operand2 == oldOperand2){
       console.log("reset");
     }else{
@@ -296,10 +295,9 @@ function setNum(n){
   num = num.replace(/&nbsp;/,"");
   if( String(num).length == 1 && num == "0" ){
     $("#result").text(n);
-  }else if( String(num).length < 3 ){
+  }else if( String(num).length < 4 ){
     $("#result").text(num + n);
   }
-
   checkCalc();
 }
 function setBackSpace(){
@@ -310,6 +308,7 @@ function setBackSpace(){
   }else{
     $("#result").text(num.slice(0,-1));
   }
+  //checkCalc();
 }
 
 function checkCalc(){
@@ -345,6 +344,20 @@ function checkCalc(){
       }
     }catch(e){
     }
+  }else if(mode == "x"){
+    try{
+      if( (operand1 * operand2) == result){
+        //console.log("OK");
+        $("#ok").css("display","block");
+        setTimeout(()=>{
+          $("#ok").css("display","none");
+          setNewProblem();
+        },1000);
+      }else{
+        //console.log("NG");
+      }
+    }catch(e){
+    }
   }
 }
 
@@ -355,7 +368,10 @@ function setlimit(){
 
 function setmode(){
   mode = $("#select_mode").val();
-  if(mode == "-"){
+  if(mode == "x"){
+    $("#operator").text("×");
+
+  }else if(mode == "-"){
     $("#operator").text("−");
 
   }else{
@@ -375,7 +391,7 @@ function setmode(){
   <div id="contener">
     <div align="center">
       <select id="select_limit">
-        <option value="5">5まで</option>
+        <option value="7">7まで</option>
         <option value="10">10まで</option>
         <option value="20">20まで</option>
         <option value="50">50まで</option>
@@ -385,8 +401,9 @@ function setmode(){
       </select>
 
       <select id="select_mode">
-        <option value="+">足し算</option>
-        <option value="-">引き算</option>
+        <option value="+">たし算</option>
+        <option value="-">ひき算</option>
+        <option value="x">かけ算</option>
       </select>
       <span id="startTime"></span>
       （<span id="elapsedTime">00分00秒</span>）

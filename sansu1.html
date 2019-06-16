@@ -206,6 +206,7 @@ function init(){
   limit = $("#select_limit").val();
   mode = $("#select_mode").val();
   setNewProblem();
+  setCountIncriment();
 }
 
 function setStartTime(){
@@ -250,7 +251,6 @@ function setCountIncriment(){
 }
 
 function setNewProblem(){
-  setCountIncriment();
   let operand1;
   let operand2;
 
@@ -324,6 +324,7 @@ function checkCalc(){
         setTimeout(()=>{
           $("#ok").css("display","none");
           setNewProblem();
+          setCountIncriment();
         },1000);
       }else{
         //console.log("NG");
@@ -338,6 +339,7 @@ function checkCalc(){
         setTimeout(()=>{
           $("#ok").css("display","none");
           setNewProblem();
+          setCountIncriment();
         },1000);
       }else{
         //console.log("NG");
@@ -352,6 +354,7 @@ function checkCalc(){
         setTimeout(()=>{
           $("#ok").css("display","none");
           setNewProblem();
+          setCountIncriment();
         },1000);
       }else{
         //console.log("NG");
@@ -370,6 +373,7 @@ function setmode(){
   mode = $("#select_mode").val();
   if(mode == "x"){
     $("#operator").text("×");
+    $("#select_limit").val("9");
 
   }else if(mode == "-"){
     $("#operator").text("−");
@@ -392,7 +396,7 @@ function setmode(){
     <div align="center">
       <select id="select_limit">
         <option value="7">7まで</option>
-        <option value="10">10まで</option>
+        <option value="9">9まで</option>
         <option value="20">20まで</option>
         <option value="50">50まで</option>
         <option value="100">100まで</option>

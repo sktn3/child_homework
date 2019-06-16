@@ -249,29 +249,45 @@ function setCountIncriment(){
 
 function setNewProblem(){
   setCountIncriment();
+  let operand1;
+  let operand2;
 
-  let random;
-  random = Math.random();
-  let operand1 = parseInt((random * limit)) % limit;
-  random = Math.random();
-  let operand2 = parseInt((random * limit)) % limit;
-  //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
+  for(let i=0; i<3; i++){
+    console.log("setNewProblem:"+i);
+    let random;
+    random = Math.random();
+    operand1 = parseInt((random * limit)) % limit;
+    random = Math.random();
+    operand2 = parseInt((random * limit)) % limit;
+    //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
 
-  if(operand1 == 0){
-    operand1 = 1;
-  }
-  if(operand2 == 0){
-    operand2 = 1;
+    if(operand1 == 0){
+      operand1 = 1;
+    }
+    if(operand2 == 0){
+      operand2 = 1;
+    }
+
+    let oldOperand1 = parseInt($("#operand1").text());
+    let oldOperand2 = parseInt($("#operand2").text());
+
+
+    //if(mode == "-" && operand1 < operand2){
+    if(operand1 < operand2){
+      let tempOperand = operand1;
+      operand1 = operand2;
+      operand2 = tempOperand;
+    }
+    if(operand1 == oldOperand1 &&  operand2 == oldOperand2){
+      console.log("reset");
+    }else{
+      break;
+    }
   }
 
-  //if(mode == "-" && operand1 < operand2){
-  if(operand1 < operand2){
-    $("#operand1").text(operand2);
-    $("#operand2").text(operand1);
-  }else{
-    $("#operand1").text(operand1);
-    $("#operand2").text(operand2);
-  }
+  $("#operand1").text(operand1);
+  $("#operand2").text(operand2);
+
   $("#result").html("&nbsp;");
 }
 
@@ -384,15 +400,11 @@ function setmode(){
 
 
     <div id="problem">
-      <div class="num calc" align="right" id="operand1">
-        0
-      </div>
+      <div class="num calc" align="right" id="operand1"></div>
       
       <div class="calc" id="operator"> ＋ </div>
 
-      <div class="num calc" align="right" id="operand2">
-        0
-      </div>
+      <div class="num calc" align="right" id="operand2"></div>
 
       <div class="calc" id="equal">
        ＝ 

@@ -4,12 +4,18 @@
 <HEAD>
 <TITLE>算数１</TITLE> 
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="robots" content="noindex">
+
 
 <script
   src="https://code.jquery.com/jquery-1.12.4.min.js"
   crossorigin="anonymous"></script>
 
 <style type="text/css">
+html {
+  touch-action: none;
+}
+
 body {
   width: 100%;
 }
@@ -190,6 +196,20 @@ function init(){
   // スクロールをキャンセル
   document.addEventListener( 'touchmove',scrollOff, false);
   document.addEventListener( 'scroll',scrollOff, false);
+
+  /* ピッチインピッチアウトによる拡大縮小を禁止 */
+  document.documentElement.addEventListener('touchstart', function (e) {
+    if (e.touches.length >= 2) {e.preventDefault();}
+  }, {passive: false});
+  /* ダブルタップによる拡大を禁止 */
+  var t = 0;
+  document.documentElement.addEventListener('touchend', function (e) {
+    var now = new Date().getTime();
+    if ((now - t) < 350){
+      e.preventDefault();
+    }
+    t = now;
+  }, false);
 
 
   setStartTime();

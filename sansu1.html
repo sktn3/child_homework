@@ -100,16 +100,17 @@ select {
 #result {
   left: 65%;
 
-  width: 300px;
+  width: 320px;
   font-size: 120px;
+  background-color: #EEE;
+  border-bottom: solid 3px #CCC;
 }
 
 .input1 {
-  background-color: #EEE;
   border-right: solid 3px gray;
 }
 .input0 {
-  background-color: #EEE;
+  border-right: solid 3px #DDD;
 }
 
 #number{
@@ -425,12 +426,15 @@ function setmode(){
         <option value="130">130まで</option>
         <option value="1000">200まで</option>
       </select>
-
+      の
       <select id="select_mode">
         <option value="+">たし算</option>
         <option value="-">ひき算</option>
         <option value="x">かけ算</option>
       </select>
+      &nbsp;
+      &nbsp;
+      &nbsp;
       <span id="startTime"></span>
       （<span id="elapsedTime">00分00秒</span>）
     </div>

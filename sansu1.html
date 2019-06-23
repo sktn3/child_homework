@@ -186,6 +186,7 @@ select {
 
 var mode = "+";//足し算,引き算 + or -
 var limit = 1;//数字の上限。０は制限なし
+var limit_mode = false;//第一オペランドの数字を固定するかどうか
 var inputClass = 1;
 
 var startTime;
@@ -277,21 +278,26 @@ function setNewProblem(){
   let operand1;
   let operand2;
 
-  for(let i=0; i<15; i++){
+  let oldOperand1 = parseInt($("#operand1").text());
+  let oldOperand2 = parseInt($("#operand2").text());
+
+
+  for(let i=0; i<10; i++){
     console.log("setNewProblem(limit:"+limit+"):"+i);
     let random;
 
-    random = Math.random();
-    console.log(random +", "+parseInt(random * String(limit).length * 10) );
-    operand1 = parseInt(random * String(limit).length * 10) % limit +1;
+    if(limit_mode){//limitの数字で固定
+      operand1 = limit;
+    }else{
+      random = Math.random();
+      console.log(random +", "+parseInt(random * String(limit).length * 10) );
+      operand1 = parseInt(random * String(limit).length * 10) % limit +1;
+    }
 
     random = Math.random();
     console.log(random +", "+parseInt(random * String(limit).length * 10) );
     operand2 = parseInt(random * String(limit).length * 10) % limit +1;
     //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
-
-    let oldOperand1 = parseInt($("#operand1").text());
-    let oldOperand2 = parseInt($("#operand2").text());
 
     //if(mode == "-" && operand1 < operand2){
     if(operand1 < operand2){
@@ -306,6 +312,7 @@ function setNewProblem(){
       break;
     }
   }
+
 
   $("#operand1").text(operand1);
   $("#operand2").text(operand2);
@@ -388,7 +395,12 @@ function checkCalc(){
 }
 
 function setlimit(){
-  limit = parseInt($("#select_limit").val());
+  let val = $("#select_limit").val();
+  let num = val.replace(/!/,"");
+  if( val.length != num.length ){
+    limit_mode = true;
+  }
+  limit = parseInt(num);
   setNewProblem();
 }
 
@@ -419,10 +431,13 @@ function setmode(){
     <div align="center">
       <select id="select_limit">
         <option value="7">7まで</option>
+        <option value="10!">10と</option><!-- !付きはデフォルトにしないこと //-->
         <option value="9">9まで</option>
         <option value="20">20まで</option>
+        <option value="20!">20と</option>
         <option value="50">50まで</option>
         <option value="100">100まで</option>
+        <option value="100!">100と</option>
         <option value="130">130まで</option>
         <option value="1000">200まで</option>
       </select>
@@ -479,7 +494,7 @@ function setmode(){
     </div>
 
   </div>
+  <div >コメント：10とだけ足す「10と」や、100とだけ足す「100と」などを追加(2019/06/23)</div>
   <div id="ok" class="OK" style="display:none;"><img class="OKimg" src="./ok.png"></div>
-
 </BODY>
 </html>

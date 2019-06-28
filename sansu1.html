@@ -227,8 +227,24 @@ function init(){
     setElapsedTime();
   },900);
 
-  limit = $("#select_limit").val();
-  mode = $("#select_mode").val();
+  //localStorageから前回指定値を入手
+  let val = localStorage.getItem('sansu1_limit');
+  if(val){
+    let num = val.replace(/!/,"");
+    $("#select_limit").val(val);
+    limit = parseInt(num);
+  }else{
+    limit = $("#select_limit").val();
+  }
+
+  mode = localStorage.getItem('sansu1_mode');
+  if(mode){
+    mode = $("#select_mode").val(mode);
+    setmode();
+  }else{
+    mode = $("#select_mode").val();
+  }
+
   setNewProblem();
   setCountIncriment();
 }
@@ -282,7 +298,7 @@ function setNewProblem(){
   let oldOperand2 = parseInt($("#operand2").text());
 
 
-  for(let i=0; i<10; i++){
+  for(let i=0; i<15; i++){
     console.log("setNewProblem(limit:"+limit+"):"+i);
     let random;
 
@@ -401,11 +417,13 @@ function setlimit(){
     limit_mode = true;
   }
   limit = parseInt(num);
+  localStorage.setItem('sansu1_limit', val);
   setNewProblem();
 }
 
 function setmode(){
   mode = $("#select_mode").val();
+  localStorage.setItem('sansu1_mode', mode);
   if(mode == "x"){
     $("#operator").text("×");
     $("#select_limit").val("9");
@@ -439,7 +457,7 @@ function setmode(){
         <option value="100">100まで</option>
         <option value="100!">100と</option>
         <option value="130">130まで</option>
-        <option value="1000">200まで</option>
+        <option value="200">200まで</option>
       </select>
       の
       <select id="select_mode">
@@ -494,7 +512,7 @@ function setmode(){
     </div>
 
   </div>
-  <div style="color:red">コメント：10とだけ足す「10と」や、100とだけ足す「100と」などを追加(2019/06/23)</div>
+  <div style="color:red">コメント：すう字やかけ算を覚える(2019/06/28)</div>
   <div id="ok" class="OK" style="display:none;"><img class="OKimg" src="./ok.png"></div>
 </BODY>
 </html>

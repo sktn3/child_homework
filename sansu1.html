@@ -230,16 +230,15 @@ function init(){
   //localStorageから前回指定値を入手
   let val = localStorage.getItem('sansu1_limit');
   if(val){
-    let num = val.replace(/!/,"");
     $("#select_limit").val(val);
-    limit = parseInt(num);
+    setlimit();
   }else{
     limit = $("#select_limit").val();
   }
 
   mode = localStorage.getItem('sansu1_mode');
   if(mode){
-    mode = $("#select_mode").val(mode);
+    $("#select_mode").val(mode);
     setmode();
   }else{
     mode = $("#select_mode").val();
@@ -247,6 +246,8 @@ function init(){
 
   setNewProblem();
   setCountIncriment();
+
+  $(document.body).css('display',"block");
 }
 
 function setStartTime(){
@@ -442,7 +443,7 @@ function setmode(){
  
 </HEAD>
 
-<BODY class="fixed" onload="init()">
+<BODY class="fixed" style="display:none" onload="init()">
 <!-- ほげ -->
 
   <div id="contener">
@@ -465,6 +466,8 @@ function setmode(){
         <option value="-">ひき算</option>
         <option value="x">かけ算</option>
       </select>
+      &nbsp;
+      （<input type="checkbox">ひっ算</input>）
       &nbsp;
       &nbsp;
       &nbsp;

@@ -347,6 +347,9 @@ function setCountIncriment(){
   $("#count_num").text( String(parseInt($("#count_num").text())+1) );
 }
 
+//maxの数にランダム値を偏らせる
+const randTimeReverse = (max) => Math.floor( (1 - Math.random() * Math.random()) * max);
+
 function setNewProblem(){
   let operand1;
   let operand2;
@@ -362,12 +365,16 @@ function setNewProblem(){
     if(limit_mode){//limitの数字で固定
       operand1 = limit;
     }else{
-      random = Math.random();
+      //random = Math.random();
+      random = randTimeReverse(limit);
+
+
       console.log(random +", "+parseInt(random * String(limit).length * 10) );
       operand1 = parseInt(random * String(limit).length * 10) % limit +1;
     }
 
     random = Math.random();
+
     console.log(random +", "+parseInt(random * String(limit).length * 10) );
     operand2 = parseInt(random * String(limit).length * 10) % limit +1;
     //console.log( "op1:"+ operand1 + ", op2:"+operand2 );

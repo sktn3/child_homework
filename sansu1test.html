@@ -7,10 +7,6 @@
 <meta name="robots" content="noindex">
 
 
-<script
-  src="https://code.jquery.com/jquery-1.12.4.min.js"
-  crossorigin="anonymous"></script>
-
 <style type="text/css">
 html {
   touch-action: none;
@@ -78,6 +74,7 @@ select {
 }
 
 .operand1 {
+  top: 20px;
   left: 0%;
   width: 200px;
 }
@@ -104,6 +101,7 @@ select {
   font-size: 100px;
 }
 .operand2 {
+  top: 20px;
   left: 35%;
 }
 .operand2hissan {
@@ -266,13 +264,15 @@ function init(){
 
   setStartTime();
 
-  $("#select_limit").change(setlimit);
-  $("#select_mode").change(setmode);
-  $("#hissan").change(sethissan);
+  document.querySelector("#select_limit").addEventListener('change',setlimit,false);
+  document.querySelector("#select_mode").addEventListener('change',setmode,false);
+  document.querySelector("#hissan").addEventListener('change',sethissan,false);
 
   setInterval(()=>{
     let nextInputClass = (inputClass + 1) % 2;
-    $(".input"+inputClass).removeClass("input"+inputClass).addClass("input"+nextInputClass);
+    let el = document.querySelector(".input"+inputClass);
+    el.classList.remove("input"+inputClass);
+    el.classList.add("input"+nextInputClass);
     inputClass = nextInputClass;
 
     setElapsedTime();
@@ -281,28 +281,29 @@ function init(){
   //localStorageから前回指定値を入手
   let val = localStorage.getItem('sansu1_limit');
   if(val){
-    $("#select_limit").val(val);
+    document.querySelector("#select_limit").value = val;
     setlimit();
   }else{
-    limit = $("#select_limit").val();
+    limit = document.querySelector("#select_limit").value;
   }
 
   mode = localStorage.getItem('sansu1_mode');
+  let elMode = document.querySelector("#select_mode");
   if(mode){
-    $("#select_mode").val(mode);
+    elMode.value = mode;
     setmode();
   }else{
-    mode = $("#select_mode").val();
+    mode = elMode.value;
   }
   if(localStorage.getItem('sansu1_hissan') == "true"){
-    $("#hissan").prop('checked',true);
+    document.querySelector("#hissan").checked = true;
     sethissan();
   }
 
   setNewProblem();
   setCountIncriment();
 
-  $(document.body).css('display',"block");
+  document.body.style.display = "block";
 }
 
 function setStartTime(){
@@ -322,8 +323,8 @@ function setStartTime(){
   let minute = d.getMinutes();
   let second = d.getSeconds();
 
-  //$("#startTime").text(year+"年"+month+"月"+day+"日 "+yobi[week]+"曜日　"+hour+"時"+minute+"分"+second+"秒");
-  $("#startTime").text(month+"月"+day+"日 "+yobi[week]+"曜日　"+hour+"時"+minute+"分");
+  //year+"年"+month+"月"+day+"日 "+yobi[week]+"曜日　"+hour+"時"+minute+"分"+second+"秒";
+  document.querySelector("#startTime").textContent = month+"月"+day+"日 "+yobi[week]+"曜日　"+hour+"時"+minute+"分";
 }
 
 function setElapsedTime(){
@@ -333,18 +334,11 @@ function setElapsedTime(){
   let minute = ("0" +parseInt(time/60)).slice(-3);
   let second = ("0" +time%60).slice(-2);
   //console.log(minute +"分"+ second+ "秒");
-  $("#elapsedTime").text(minute +"分"+ second+ "秒");
+  document.querySelector("#elapsedTime").textContent = minute +"分"+ second+ "秒";
 }
 
-/*
-function setCount0(){
-  $("#count_num").text("0");
-}
-*/
-
-function setCountIncriment(){
-  //console.log($("#count_num").text());
-  $("#count_num").text( String(parseInt($("#count_num").text())+1) );
+const setCountIncriment = ()=>{
+  document.querySelector("#count_num").textContent = String(parseInt(document.querySelector("#count_num").textContent)+1);
 }
 
 //maxの数にランダム値を偏らせる
@@ -354,28 +348,26 @@ function setNewProblem(){
   let operand1;
   let operand2;
 
-  let oldOperand1 = parseInt($("#operand1").text());
-  let oldOperand2 = parseInt($("#operand2").text());
+  let elOp1 = document.querySelector("#operand1");
+  let elOp2 = document.querySelector("#operand2");
+
+  let oldOperand1 = parseInt(elOp1.textContent);
+  let oldOperand2 = parseInt(elOp2.textContent);
 
 
   for(let i=0; i<15; i++){
-    console.log("setNewProblem(limit:"+limit+"):"+i);
+    console.log("setNewProblem(limit:"+limit+") i:"+i);
     let random;
 
     if(limit_mode){//limitの数字で固定
       operand1 = limit;
     }else{
-      //random = Math.random();
-      random = randTimeReverse(limit);
-
-
-      console.log(random +", "+parseInt(random * String(limit).length * 10) );
-      operand1 = parseInt(random * String(limit).length * 10) % limit +1;
+      operand1 = randTimeReverse(limit);
     }
 
     random = Math.random();
 
-    console.log(random +", "+parseInt(random * String(limit).length * 10) );
+    //console.log("op2:" + random +", "+parseInt(random * String(limit).length * 10) );
     operand2 = parseInt(random * String(limit).length * 10) % limit +1;
     //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
 
@@ -393,46 +385,52 @@ function setNewProblem(){
     }
   }
 
+  elOp1.textContent = operand1;
+  elOp2.textContent = operand2;
 
-  $("#operand1").text(operand1);
-  $("#operand2").text(operand2);
-
-  $("#result").html("&nbsp;");
+  document.querySelector("#result").textContent = " ";
 }
 
 function setNum(n){
-  let num = $("#result").html();
-  num = num.replace(/&nbsp;/,"");
+  let elRslt = document.querySelector("#result");
+  let num = elRslt.textContent;
+  num = num.replace(/\s/,"");
   if( String(num).length == 1 && num == "0" ){
-    $("#result").text(n);
+    elRslt.textContent = n;
   }else if( String(num).length < 4 ){
-    $("#result").text(num + n);
+    elRslt.textContent = num + n;
   }
   checkCalc();
 }
 function setBackSpace(){
-  let num = $("#result").html();
-  num = num.replace(/&nbsp;/,"");
+  let elRslt = document.querySelector("#result");
+  let num = elRslt.textContent;
+  num = num.replace(/\s/,"");
   if( String(num).length == 0 || String(num).length == 1 ){
-    $("#result").html("&nbsp;");
+    elRslt.textContent = " ";
   }else{
-    $("#result").text(num.slice(0,-1));
+    elRslt.textContent = num.slice(0,-1);
   }
   //checkCalc();
 }
 
 function checkCalc(){
-  let operand1 = parseInt($("#operand1").text());
-  let operand2 = parseInt($("#operand2").text());
-  let result = parseInt($("#result").text());
+  let elOp1 = document.querySelector("#operand1");
+  let elOp2 = document.querySelector("#operand2");
+  let elRslt = document.querySelector("#result");
+  let elOK = document.querySelector("#ok");
+
+  let operand1 = parseInt( elOp1.textContent );
+  let operand2 = parseInt( elOp2.textContent );
+  let result = parseInt( elRslt.textContent );
 
   if(mode == "+"){
     try{
       if( (operand1 + operand2) == result){
         //console.log("OK");
-        $("#ok").css("display","block");
+        elOK.style.display = "block";
         setTimeout(()=>{
-          $("#ok").css("display","none");
+          elOK.style.display = "none";
           setNewProblem();
           setCountIncriment();
         },1000);
@@ -445,9 +443,9 @@ function checkCalc(){
     try{
       if( (operand1 - operand2) == result){
         //console.log("OK");
-        $("#ok").css("display","block");
+        elOK.style.display = "block";
         setTimeout(()=>{
-          $("#ok").css("display","none");
+          elOK.style.display = "none";
           setNewProblem();
           setCountIncriment();
         },1000);
@@ -460,9 +458,9 @@ function checkCalc(){
     try{
       if( (operand1 * operand2) == result){
         //console.log("OK");
-        $("#ok").css("display","block");
+        elOK.style.display = "block";
         setTimeout(()=>{
-          $("#ok").css("display","none");
+          elOK.style.display = "none";
           setNewProblem();
           setCountIncriment();
         },1000);
@@ -475,7 +473,7 @@ function checkCalc(){
 }
 
 function setlimit(){
-  let val = $("#select_limit").val();
+  let val = document.querySelector("#select_limit").value;
   let num = val.replace(/!/,"");
   if( val.length != num.length ){
     limit_mode = true;
@@ -486,65 +484,79 @@ function setlimit(){
 }
 
 function setmode(){
-  mode = $("#select_mode").val();
+  let elOp = document.querySelector("#operator");
+  let ellim = document.querySelector("#select_limit");
+
+
+  mode = document.querySelector("#select_mode").value;
+  console.log("mode: "+mode);
   localStorage.setItem('sansu1_mode', mode);
   if(mode == "x"){
-    $("#operator").text("×");
-    $("#select_limit").val("9");
+    elOp.textContent = "×";
+    ellim.value = "9";
 
   }else if(mode == "-"){
-    $("#operator").text("−");
+    elOp.textContent = "−";
 
   }else{
-    $("#operator").text("＋");
+    elOp.textContent = "＋";
   }
   setNewProblem();
 }
 function sethissan(){
-  if($("#hissan").is(':checked')){
-    $("#problem").removeClass("problem");
-    $("#problem").addClass("problemhissan");
+  let elHissan = document.querySelector("#hissan");
+  let elPrb = document.querySelector("#problem");
+  let elOp = document.querySelector("#operator");
+  let elOp1 = document.querySelector("#operand1");
+  let elOp2 = document.querySelector("#operand2");
+  let elBar = document.querySelector("#bar");
+  let elEq = document.querySelector("#equal");
+  let elRslt = document.querySelector("#result");
 
-    $("#operand1").removeClass("operand1");
-    $("#operand1").addClass("operand1hissan");
+  if(elHissan.checked){
+    elPrb.classList.remove("problem");
+    elPrb.classList.add("problemhissan");
 
-    $("#operator").removeClass("operator");
-    $("#operator").addClass("operatorhissan");
+    elOp1.classList.remove("operand1");
+    elOp1.classList.add("operand1hissan");
 
-    $("#operand2").removeClass("operand2");
-    $("#operand2").addClass("operand2hissan");
+    elOp.classList.remove("operator");
+    elOp.classList.add("operatorhissan");
 
-    $("#bar").removeClass("bar");
-    $("#bar").addClass("barhissan");
+    elOp2.classList.remove("operand2");
+    elOp2.classList.add("operand2hissan");
+
+    elBar.classList.remove("bar");
+    elBar.classList.add("barhissan");
     
-    $("#equal").removeClass("equal");
-    $("#equal").addClass("equalhissan");
+    elEq.classList.remove("equal");
+    elEq.classList.add("equalhissan");
 
-    $("#result").removeClass("result");
-    $("#result").addClass("resulthissan");
+    elRslt.classList.remove("result");
+    elRslt.classList.add("resulthissan");
 
     localStorage.setItem('sansu1_hissan',"true");
   }else{
-    $("#problem").removeClass("problemhissan");
-    $("#problem").addClass("problem");
+    elPrb.classList.remove("problemhissan");
+    elPrb.classList.add("problem");
 
-    $("#operand1").removeClass("operand1hissan");
-    $("#operand1").addClass("operand1");
+    elOp1.classList.remove("operand1hissan");
+    elOp1.classList.add("operand1");
 
-    $("#operator").removeClass("operatorhissan");
-    $("#operator").addClass("operator");
+    elOp.classList.remove("operatorhissan");
+    elOp.classList.add("operator");
 
-    $("#operand2").removeClass("operand2hissan");
-    $("#operand2").addClass("operand2");
+    elOp2.classList.remove("operand2hissan");
+    elOp2.classList.add("operand2");
 
-    $("#bar").removeClass("barhissan");
-    $("#bar").addClass("bar");
+    elBar.classList.remove("barhissan");
+    elBar.classList.add("bar");
     
-    $("#equal").removeClass("equalhissan");
-    $("#equal").addClass("equal");
+    elEq.classList.remove("equalhissan");
+    elEq.classList.add("equal");
 
-    $("#result").removeClass("resulthissan");
-    $("#result").addClass("result");
+    elRslt.classList.remove("resulthissan");
+    elRslt.classList.add("result");
 
     localStorage.setItem('sansu1_hissan',"false");
   }
@@ -602,20 +614,6 @@ function sethissan(){
       </div>
 
       <div class="num input1 calc result" align="right" id="result">&nbsp;</div>
-      <!--
-      <div class="num calc operand1hissan" align="right" id="operand1"></div>
-      
-      <div class="calc operatorhissan" id="operator"> ＋ </div>
-
-      <div class="num calc operand2hissan" align="right" id="operand2"></div>
-
-      <div class="calc barhissan"></div>
-      <div class="calc equalhissan" id="equal">
-       ＝ 
-      </div>
-
-      <div class="num input1 calc resulthissan" align="right" id="result">&nbsp;</div>
-      //-->
 
     </div>
 

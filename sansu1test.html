@@ -37,11 +37,12 @@ body.fixed{
 }
 
 select {
-  font-size: 24px;
+  font-size: 32px;
 }
 
 #startTime {
-  font-size: 16px;
+  font-size: 32px;
+  white-space: nowrap;
 }
 
 .problem{
@@ -178,19 +179,19 @@ select {
   padding: 4px;
   margin: 2px
 
-  height: 100px;
-  width: 100px;
+  height: 200px;
+  width: 200px;
 
-  font-size: 90px;
+  font-size: 200px;
   font-weight: bold;
 
   text-align: center;
   text-decoration:none;
 
-  border: 5px solid white;
+  border: 10px solid white;
 
   color: white;
-  border-radius: 20px;
+  border-radius: 40px;
   text-shadow: 5px 5px gray;
 
   background-image:-moz-linear-gradient(
@@ -572,7 +573,11 @@ function sethissan(){
 <!-- ほげ -->
 
   <div id="contener">
-    <div align="center">
+    <div style="color:red">
+      縦向き専用にしました。
+    </div>
+
+    <div align="center" style="background-color:#EEF;">
       <span id="count_num">0</span>問目
       <select id="select_limit">
         <option value="7">7まで</option>
@@ -594,9 +599,6 @@ function sethissan(){
       </select>
       &nbsp;
       （<input id="hissan" type="checkbox">ひっ算</input>）
-      &nbsp;
-      &nbsp;
-      &nbsp;
       <span id="startTime"></span>
       （<span id="elapsedTime">00分00秒</span>）
     </div>

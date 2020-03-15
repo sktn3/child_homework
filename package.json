@@ -1,0 +1,24 @@
+{
+  "name": "pg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sansu1.html",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sktn3/kaoru3work.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sktn3/kaoru3work/issues"
+  },
+  "homepage": "https://github.com/sktn3/kaoru3work#readme"
+}

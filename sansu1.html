@@ -5,6 +5,16 @@
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="robots" content="noindex">
 
+<SCRIPT type="text/javascript">
+    //es6以降をサポートしてない場合
+    if (!location.href.match("es5")){
+        try{
+            Function('x=>1');
+        }catch(e){
+            location.href = "sansu1.es5.html";
+        }
+    }
+</SCRIPT>
 <SCRIPT type="text/javascript" src="sansu1.js"> </SCRIPT>
 
 <style type="text/css">
@@ -37,11 +47,11 @@ body.fixed{
 }
 
 select {
-  font-size: 32px;
+  font-size: 24px;
 }
 
 #startTime {
-  font-size: 32px;
+  font-size: 21px;
   white-space: nowrap;
 }
 

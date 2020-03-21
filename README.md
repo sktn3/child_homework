@@ -2,7 +2,7 @@
 # 小学校低学年用の算数ドリル
 
 公開
-https://sktn3.github.io/child_work/sansu1.html
+https://sktn3.github.io/child_homework/sansu1.html
 
 - HTML+JSのみで稼働
 	- 以下をAWS S3等に置きブラウザで開くだけで使えます

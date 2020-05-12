@@ -70,6 +70,12 @@ function init(){
     setNewProblem();
     setCountIncriment();
 
+
+    let audio;
+    audio = document.getElementById("touch_sound");
+    audio.load();
+    audio.play();
+
     document.body.style.display = "block";
 }
 
@@ -168,6 +174,7 @@ function setNum(n){
         elRslt.textContent = num + n;
     }
     checkCalc();
+    try{ touch_sound(); }catch(e){}
 }
 function setBackSpace(){
     let elRslt = document.querySelector("#result");
@@ -248,6 +255,8 @@ function setlimit(){
     limit = parseInt(num);
     localStorage.setItem('sansu1_limit', val);
     setNewProblem();
+
+    try{ touch_sound(); }catch(e){}
 }
 
 function setmode(){
@@ -269,6 +278,7 @@ function setmode(){
         elOp.textContent = "＋";
     }
     setNewProblem();
+    try{ touch_sound(); }catch(e){}
 }
 function sethissan(){
     let elHissan = document.querySelector("#hissan");
@@ -328,4 +338,12 @@ function sethissan(){
         localStorage.setItem('sansu1_hissan',"false");
     }
 
+    try{ touch_sound(); }catch(e){}
+}
+
+
+function touch_sound(){
+    let audio = document.getElementById("touch_sound")
+    audio.muted = false;
+    audio.play();
 }

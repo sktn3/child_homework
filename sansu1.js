@@ -168,10 +168,10 @@ function setNum(n){
     let elRslt = document.querySelector("#result");
     let num = elRslt.textContent;
     num = num.replace(/\s/,"");
-    if( String(num).length == 1 && num == "0" ){
+    if( String(num).length == 0 ){
         elRslt.textContent = n;
     }else if( String(num).length < 4 ){
-        elRslt.textContent = num + n;
+        elRslt.textContent =  n + num;
     }
     checkCalc();
 }

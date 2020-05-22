@@ -73,8 +73,7 @@ function init(){
 
     let audio;
     audio = document.getElementById("touch_sound");
-    audio.load();
-    audio.play();
+    try{ audio.load(); audio.play(); }catch(e){}
 
     document.body.style.display = "block";
 }

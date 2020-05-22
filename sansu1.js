@@ -164,6 +164,7 @@ function setNewProblem(){
 }
 
 function setNum(n){
+    try{ touch_sound(); }catch(e){}
     let elRslt = document.querySelector("#result");
     let num = elRslt.textContent;
     num = num.replace(/\s/,"");
@@ -173,9 +174,9 @@ function setNum(n){
         elRslt.textContent = num + n;
     }
     checkCalc();
-    try{ touch_sound(); }catch(e){}
 }
 function setBackSpace(){
+    try{ touch_sound(); }catch(e){}
     let elRslt = document.querySelector("#result");
     let num = elRslt.textContent;
     num = num.replace(/\s/,"");

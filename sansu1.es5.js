@@ -169,6 +169,9 @@ function setNewProblem() {
 }
 
 function setNum(n) {
+    try {
+        touch_sound();
+    } catch (e) {}
     var elRslt = document.querySelector("#result");
     var num = elRslt.textContent;
     num = num.replace(/\s/, "");
@@ -178,11 +181,11 @@ function setNum(n) {
         elRslt.textContent = num + n;
     }
     checkCalc();
+}
+function setBackSpace() {
     try {
         touch_sound();
     } catch (e) {}
-}
-function setBackSpace() {
     var elRslt = document.querySelector("#result");
     var num = elRslt.textContent;
     num = num.replace(/\s/, "");

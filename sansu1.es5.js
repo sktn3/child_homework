@@ -189,10 +189,11 @@ function setBackSpace() {
     var elRslt = document.querySelector("#result");
     var num = elRslt.textContent;
     num = num.replace(/\s/, "");
-    if (String(num).length == 0 || String(num).length == 1) {
+    var len = String(num).length;
+    if (len == 0 || len == 1) {
         elRslt.textContent = " ";
     } else {
-        elRslt.textContent = num.slice(0, -1);
+        elRslt.textContent = num.slice(1, len);
     }
     //checkCalc();
 }

@@ -1,6 +1,7 @@
 
 var mode = "+";//足し算,引き算 + or -
-var limit = 1;//数字の上限。０は制限なし
+var limit = 1;//数字の上限。０は制限なし。pastは過去問
+var past_num = 0;//過去問の難問目を表示するか
 var limit_mode = false;//第一オペランドの数字を固定するかどうか
 var inputClass = 1;
 
@@ -123,37 +124,46 @@ function setNewProblem(){
     let elOp1 = document.querySelector("#operand1");
     let elOp2 = document.querySelector("#operand2");
 
-    let oldOperand1 = parseInt(elOp1.textContent);
-    let oldOperand2 = parseInt(elOp2.textContent);
+    console.log("setNewProblem limit:"+limit);
+    if(limit == "past"){
+        console.log("setNewProblem(past) num:"+past_num);
+    
+        operand1 = 1;
+        operand2 = 1;
 
+    }else{
 
-    for(let i=0; i<15; i++){
-        console.log("setNewProblem(limit:"+limit+") i:"+i);
-        let random;
+        let oldOperand1 = parseInt(elOp1.textContent);
+        let oldOperand2 = parseInt(elOp2.textContent);
 
-        if(limit_mode){//limitの数字で固定
-            operand1 = limit;
-        }else{
-            operand1 = randTimeReverse(limit);
-        }
+        for(let i=0; i<15; i++){
+            console.log("setNewProblem(limit:"+limit+") i:"+i);
+            let random;
 
-        random = Math.random();
+            if(limit_mode){//limitの数字で固定
+                operand1 = limit;
+            }else{
+                operand1 = randTimeReverse(limit);
+            }
 
-        //console.log("op2:" + random +", "+parseInt(random * String(limit).length * 10) );
-        operand2 = parseInt(random * String(limit).length * 10) % limit +1;
-        //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
+            random = Math.random();
 
-        //if(mode == "-" && operand1 < operand2){
-        if(operand1 < operand2){
-            let tempOperand = operand1;
-            operand1 = operand2;
-            operand2 = tempOperand;
-        }
+            //console.log("op2:" + random +", "+parseInt(random * String(limit).length * 10) );
+            operand2 = parseInt(random * String(limit).length * 10) % limit +1;
+            //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
 
-        if(operand1 == oldOperand1 &&    operand2 == oldOperand2){
-            console.log("reset");
-        }else{
-            break;
+            //if(mode == "-" && operand1 < operand2){
+            if(operand1 < operand2){
+                let tempOperand = operand1;
+                operand1 = operand2;
+                operand2 = tempOperand;
+            }
+
+            if(operand1 == oldOperand1 &&    operand2 == oldOperand2){
+                console.log("reset");
+            }else{
+                break;
+            }
         }
     }
 
@@ -248,13 +258,22 @@ function checkCalc(){
 }
 
 function setlimit(){
+    let mode = document.querySelector("#select_mode");
     let val = document.querySelector("#select_limit").value;
-    let num = val.replace(/!/,"");
-    if( val.length != num.length ){
-        limit_mode = true;
+    if(val=="past"){
+        mode.disabled = true;
+        limit = "past";
+    }else{
+        mode.disabled = false;
+
+        let num = val.replace(/!/,"");
+        if( val.length != num.length ){
+            limit_mode = true;
+        }
+        limit = parseInt(num);
     }
-    limit = parseInt(num);
     localStorage.setItem('sansu1_limit', val);
+
     setNewProblem();
 
     try{ touch_sound(); }catch(e){}
@@ -264,13 +283,14 @@ function setmode(){
     let elOp = document.querySelector("#operator");
     let ellim = document.querySelector("#select_limit");
 
-
     mode = document.querySelector("#select_mode").value;
     console.log("mode: "+mode);
     localStorage.setItem('sansu1_mode', mode);
     if(mode == "x"){
         elOp.textContent = "×";
-        ellim.value = "9";
+        if(limit != "past"){
+            ellim.value = "9";
+        }
 
     }else if(mode == "-"){
         elOp.textContent = "−";

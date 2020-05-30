@@ -48,7 +48,7 @@ body.fixed{
 #contener {
     position:absolute;
     top: 0%;
-    left: 2%;
+    left: 2vw;
     width: 98%;
 
 }
@@ -93,24 +93,24 @@ select {
 
 .operand1 {
     top: 20px;
-    left: 0%;
+    left: 0;
     width: 200px;
 }
 .operand1hissan {
-    right: 30%;
+    left: 45vw;
     text-align: right;
-    width: 320px;
+    width: 200px;
 }
 
 #operand1 {
     font-size: 100px;
 }
 .operator {
-    left: 25%;
+    left: 25vw;
     top: 20px;
 }
 .operatorhissan {
-    left: 20%;
+    left: 20vw;
     top: 100px;
 }
 #operator {
@@ -119,10 +119,10 @@ select {
 }
 .operand2 {
     top: 20px;
-    left: 35%;
+    left: 35vw;
 }
 .operand2hissan {
-    right: 30%;
+    left: 45vw;
     top: 100px;
     width: 320px;
     text-align: right;
@@ -132,7 +132,7 @@ select {
     font-size: 100px;
 }
 .equal {
-    left: 55%;
+    left: 55vw;
     top: 20px;
 }
 .equalhissan {
@@ -148,34 +148,38 @@ select {
 .barhissan {
     top: 230px;
     display: block;
-    left: 20%;
+    left: 20vw;
     width: 60%;
     border-bottom: solid 3px black;
 }
-.result {
-    left: 65%;
-    top: 10px;
-}
-.resulthissan {
-    right: 30%;
-    top: 250px;
-}
-#result {
+.result_common{
     width: 280px;
     font-size: 100px;
 
     height: 130px;
     line-height: 130px;
-
+}
+.result {
+    left: 65vw;
+    top: 10px;
+}
+.resulthissan {
+    left: 36vw;
+    top: 250px;
+}
+#result {
     background-color: #EEE;
     border-bottom: solid 3px #CCC;
+}
+#result_cursor{
+    z-index: 1000;
 }
 
 .input1 {
     border-right: solid 3px gray;
 }
 .input0 {
-    border-right: solid 3px #DDD;
+    border-right: solid 1px #DDD;
 }
 
 #number{
@@ -236,8 +240,8 @@ select {
 
 .OK{
     position: absolute;
-    top: 5%;
-    left: 5%;
+    top: 5vh;
+    left: 10vw;
     z-index: 1000;
 }
 .OKimg{
@@ -293,7 +297,8 @@ select {
              ＝ 
             </div>
 
-            <div class="num input1 calc result" align="right" id="result">&nbsp;</div>
+            <div class="num calc result result_common" align="right" id="result">&nbsp;</div>
+            <div class="num calc result result_common input1" align="right" id="result_cursor">&nbsp;</div>
 
         </div>
 
@@ -316,8 +321,12 @@ select {
 
     </div>
     <div id="ok" class="OK" style="display:none;"><img class="OKimg" src="./ok.png"></div>
+
     <audio id="touch_sound" preload="auto" muted playsinline >
         <source src="./media/touch_sound.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ganba_sound" preload="auto" muted playsinline >
+        <source src="./media/end_ganba.mp3" type="audio/mpeg">
     </audio>
 </BODY>
 </html>

@@ -46,7 +46,7 @@ function init() {
         inputClass = nextInputClass;
 
         setElapsedTime();
-    }, 900);
+    }, 500);
 
     //localStorageから前回指定値を入手
     var val = localStorage.getItem('sansu1_limit');
@@ -179,17 +179,23 @@ function setNewProblem() {
 }
 
 function setNum(n) {
+    console.log(">> setNum");
     try {
         touch_sound();
     } catch (e) {}
     var elRslt = document.querySelector("#result");
+
     var num = elRslt.textContent;
     num = num.replace(/\s/, "");
-    if (String(num).length == 0) {
+
+    var numLen = String(num).length;
+
+    if (numLen == 0) {
         elRslt.textContent = n;
-    } else if (String(num).length < 4) {
+    } else if (numLen < 4) {
         elRslt.textContent = n + num;
     }
+    changeCursor(numLen + 1);
     checkCalc();
 }
 function setBackSpace() {
@@ -199,13 +205,29 @@ function setBackSpace() {
     var elRslt = document.querySelector("#result");
     var num = elRslt.textContent;
     num = num.replace(/\s/, "");
-    var len = String(num).length;
-    if (len == 0 || len == 1) {
+    var numLen = String(num).length;
+    if (numLen == 0 || numLen == 1) {
         elRslt.textContent = " ";
+        numLen = 0;
     } else {
-        elRslt.textContent = num.slice(1, len);
+        elRslt.textContent = num.slice(1, numLen);
+        numLen--;
     }
+    changeCursor(numLen);
     //checkCalc();
+}
+
+function changeCursor(numLen) {
+    console.log(">> changeCursor");
+    var ResultWidth = 280; //px
+    var ResultMaxLen = 4;
+
+    var w = ResultWidth / ResultMaxLen * (ResultMaxLen - numLen);
+    console.log("numLen: " + numLen);
+    console.log("ResultWhidth: " + w);
+
+    var elRsltCsr = document.querySelector("#result_cursor");
+    elRsltCsr.style.width = String(w) + "px";
 }
 
 function checkCalc() {
@@ -223,6 +245,7 @@ function checkCalc() {
             if (operand1 + operand2 == result) {
                 //console.log("OK");
                 elOK.style.display = "block";
+                ganba_sound();
                 setTimeout(function () {
                     elOK.style.display = "none";
                     setNewProblem();
@@ -237,6 +260,7 @@ function checkCalc() {
             if (operand1 - operand2 == result) {
                 //console.log("OK");
                 elOK.style.display = "block";
+                ganba_sound();
                 setTimeout(function () {
                     elOK.style.display = "none";
                     setNewProblem();
@@ -251,6 +275,7 @@ function checkCalc() {
             if (operand1 * operand2 == result) {
                 //console.log("OK");
                 elOK.style.display = "block";
+                ganba_sound();
                 setTimeout(function () {
                     elOK.style.display = "none";
                     setNewProblem();
@@ -318,6 +343,7 @@ function sethissan() {
     var elBar = document.querySelector("#bar");
     var elEq = document.querySelector("#equal");
     var elRslt = document.querySelector("#result");
+    var elRsltCsr = document.querySelector("#result_cursor");
 
     if (elHissan.checked) {
         elPrb.classList.remove("problem");
@@ -340,6 +366,9 @@ function sethissan() {
 
         elRslt.classList.remove("result");
         elRslt.classList.add("resulthissan");
+
+        elRsltCsr.classList.remove("result");
+        elRsltCsr.classList.add("resulthissan");
 
         localStorage.setItem('sansu1_hissan', "true");
     } else {
@@ -364,6 +393,9 @@ function sethissan() {
         elRslt.classList.remove("resulthissan");
         elRslt.classList.add("result");
 
+        elRsltCsr.classList.remove("resulthissan");
+        elRsltCsr.classList.add("result");
+
         localStorage.setItem('sansu1_hissan', "false");
     }
 
@@ -372,8 +404,17 @@ function sethissan() {
     } catch (e) {}
 }
 
-function touch_sound() {
-    var audio = document.getElementById("touch_sound");
+function audio_sound(id) {
+    console.log(">> " + id);
+    var audio = document.getElementById(id);
+    audio.pause();
+    audio.currentTime = 0;
     audio.muted = false;
     audio.play();
+}
+function ganba_sound() {
+    audio_sound("ganba_sound");
+}
+function touch_sound() {
+    audio_sound("touch_sound");
 }

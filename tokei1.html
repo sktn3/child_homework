@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<HEAD>
+<TITLE>時計１</TITLE> 
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="robots" content="noindex">
+
+<script type="text/javascript">
+
+const x = new clock('tokei1');
+const y = new clock('tokei2');
+
+function init(){
+    const h1 = document.getElementById("h1").value;
+    const m1 = document.getElementById("m1").value;
+    const h2 = document.getElementById("h2").value;
+    const m2 = document.getElementById("m2").value;
+
+    x.show(h1,m1);
+    y.show(h2,m2);
+}
+
+function clock(id){
+    this.id = id;
+    this.init = function(){
+        this.timerId = null;
+        this.canvas = document.getElementById(this.id);
+        this.ctx = this.canvas.getContext('2d');
+        this.width = this.canvas.width;
+        this.height = this.canvas.height;
+        
+        var x = this.ctx;
+        x.translate(this.width / 2, this.height / 2); 
+        x.scale(this.width / 200, this.height / 200); 
+        x.rotate(-Math.PI/2); 
+        x.strokeStyle = "black"; 
+        x.fillStyle = "white"; 
+        x.lineCap = "butt";  
+    }
+
+    this.memoriM = function(){
+        var x = this.ctx;
+        x.save();
+        x.lineWidth = 2; 
+        for (var i = 0; i < 60; i++) { 
+            x.beginPath(); 
+            x.rotate(Math.PI/30); 
+            x.moveTo(90,0); 
+            x.lineTo(100,0); 
+            x.stroke(); 
+        } 
+        x.restore();
+    }
+    this.memoriH = function(){
+        var x = this.ctx;
+        x.save();
+        x.lineWidth = 8; 
+        for (var i = 0; i < 12; i++) { 
+            x.beginPath(); 
+            x.rotate(Math.PI/6); 
+            x.moveTo(80,0); 
+            x.lineTo(100,0); 
+            x.stroke(); 
+        } 
+        x.restore();
+    }
+    this.h = function(){
+        var x = this.ctx;
+        x.save();
+        x.rotate(Math.PI/6 * (this.datetime.getHours() + this.datetime.getMinutes() / 60)); 
+        x.lineWidth = 8; 
+        x.beginPath(); 
+        x.moveTo(-5, 0); 
+        x.lineTo(60, 0); 
+        x.stroke(); 
+        x.restore();
+    }
+    this.m = function(){
+        var x = this.ctx;
+        x.save();
+        x.rotate(Math.PI/30 * (this.datetime.getMinutes() + this.datetime.getSeconds() / 60)); 
+        x.lineWidth = 4; 
+        x.beginPath(); 
+        x.moveTo(-5, 0); 
+        x.lineTo(80, 0); 
+        x.stroke(); 
+        x.restore();
+    }
+    this.s = function(){
+        var x = this.ctx;
+        x.save();
+        x.rotate(Math.PI/30 * this.datetime.getSeconds()); 
+        x.strokeStyle = "#cc0000"; 
+        x.lineWidth = 2; 
+        x.beginPath(); 
+        x.moveTo(-10, 0); 
+        x.lineTo(80, 0); 
+        x.stroke(); 
+        x.restore();
+    }
+    this.ticktack = function(date){
+        if (!this.canvas) {
+            this.init();
+        }
+        if(date==null){
+            this.datetime = new Date();
+        }else{
+            this.datetime = date;
+        }
+        var x = this.ctx;
+        x.clearRect(-100, -100, 200, 200);
+        this.memoriM();
+        this.memoriH();
+        this.h();
+        this.m();
+        this.s();
+    }
+    this.show = function(h,m){
+        date = new Date(2020,6,16,h,m,0);
+        var _clock = this;
+        _clock.ticktack(date);
+    }
+    this.start = function(){
+        if (!this.timerId) {
+            var _clock = this;
+            _clock.ticktack();
+            this.timerId = setInterval(function(){_clock.ticktack();}, 1000);
+        }
+    }
+    this.stop = function() {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+            this.timerId = null;
+        }
+    }
+}
+</script>
+</head>
+
+<body onload="init()">
+<canvas id="tokei1" width="400" height="400"></canvas>
+<span style="font-size:10vh">➡︎</span>
+<canvas id="tokei2" width="400" height="400"></canvas>
+<br>
+<input type=number id=h1 width=10 value=7>：<input type=number id=m1 width=10 value=30>
+　　　　　　　　
+<input type=number id=h2 width=10 value=8>：<input type=number id=m2 width=10 value=30>
+<br>
+<br>
+<br>
+<input type=button width=20 height=5 value="変更" onclick="init()">
+
+
+</body>
+
+</html>

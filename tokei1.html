@@ -199,26 +199,40 @@ function clock(id){
     }
 }
 </script>
+<style>
+.allow{
+    position:relative;
+    top:-170px;
+    font-size:min(10vh,10vw);
+}
+.btn{
+    font-size: min(3vh, 3vw);
+}
+.space{
+    font-size: min(5vh,5vw);
+}
+</style>
+
 </head>
 
 <body onload="init()">
 左時計より、右時計は何時間何分...？<br>
 <canvas id="tokei1" width="400" height="400"></canvas>
-<span style="position:relative;top:-170px;font-size:min(10vh,10vw);">➡︎</span>
+<span class="allow">➡︎</span>
 <canvas id="tokei2" width="400" height="400"></canvas>
 <br>
 <input type=number id=h1 width=10 value=7>：<input type=number id=m1 width=10 value=30>
-<span style="font-size:min(5vh,5vw)">　　　　　</span>
+<span class="space">　　　　　</span>
 <input type=number id=h2 width=10 value=8>：<input type=number id=m2 width=10 value=30>
 <input type=button width=20 height=5 value="変更" onclick="change()">
 <br/>
 <br/>
 <hr>
-<input type=button width=20 height=5 value="ランダムに変える（レベル１）" onclick="random1()">
+<input type=button width=20 height=5 class="btn" value="ランダムに変える（レベル１）" onclick="random1()">
 左時計より、右時計は未来になる（はず）。０分か３０分のみ。
 <br/>
 <br/>
-<input type=button width=20 height=5 value="ランダムに変える（レベル２）" onclick="random2()">
+<input type=button width=20 height=5 class="btn" value="ランダムに変える（レベル２）" onclick="random2()">
 左時計より、右時計は未来になる（はず）。０分、１０分、２０分、３０分、４０分、５０分
 
 </body>

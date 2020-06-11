@@ -14,11 +14,17 @@ const t1 = new clock('tokei1');
 const t2 = new clock('tokei2');
 
 function init(){
+    document.addEventListener('touchstart', function(event){
+        const a = document.getElementById("allow");
+        a.focus();
+    }, false);
+
     const h1 = document.getElementById("h1");
     const m1 = document.getElementById("m1");
     const h2 = document.getElementById("h2");
     const m2 = document.getElementById("m2");
 
+    
     t1.show(h1.value, m1.value);
     t2.show(h2.value, m2.value);
 }
@@ -218,7 +224,7 @@ function clock(id){
 <body onload="init()">
 左時計より、右時計は何時間何分...？<br>
 <canvas id="tokei1" width="400" height="400"></canvas>
-<span class="allow">➡︎</span>
+<span id="allow" class="allow">➡︎</span>
 <canvas id="tokei2" width="400" height="400"></canvas>
 <br>
 <input type=number id=h1 width=10 value=7>：<input type=number id=m1 width=10 value=30>

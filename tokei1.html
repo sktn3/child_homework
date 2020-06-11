@@ -204,11 +204,11 @@ function clock(id){
 <body onload="init()">
 左時計より、右時計は何時間何分...？<br>
 <canvas id="tokei1" width="400" height="400"></canvas>
-<span style="font-size:10vh">➡︎</span>
+<span style="font-size:min(10vh,10vw)">➡︎</span>
 <canvas id="tokei2" width="400" height="400"></canvas>
 <br>
 <input type=number id=h1 width=10 value=7>：<input type=number id=m1 width=10 value=30>
-　　　　　　　　　　　　　　　　
+<span style="font-size:min(5vh,5vw)">　　　　　</span>
 <input type=number id=h2 width=10 value=8>：<input type=number id=m2 width=10 value=30>
 <input type=button width=20 height=5 value="変更" onclick="change()">
 <br/>

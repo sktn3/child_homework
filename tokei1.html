@@ -46,6 +46,16 @@ function random1(){
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
 }
+function random2(){
+    const hour = Math.round( Math.random()*9 );
+    const interval = Math.round( Math.random() ) +1;
+    const min1 = Math.round( Math.random()*6 ) *10;
+    const min2 = Math.round( Math.random()*6 ) *10;
+
+    t1.show(hour, min1);
+    t2.show(hour+interval, min2);
+    //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
+}
 
 function clock(id){
     this.id = id;
@@ -204,7 +214,11 @@ function clock(id){
 <br/>
 <hr>
 <input type=button width=20 height=5 value="ランダムに変える（レベル１）" onclick="random1()">
-
+未来にしか変わらない（はず）。０分か３０分のみ。
+<br/>
+<br/>
+<input type=button width=20 height=5 value="ランダムに変える（レベル２）" onclick="random2()">
+未来にしか変わらない（はず）。０分、１０分、２０分、３０分、４０分、５０分
 
 </body>
 

@@ -10,8 +10,8 @@
 //https://www.softel.co.jp/blogs/tech/archives/3914
 
 
-const x = new clock('tokei1');
-const y = new clock('tokei2');
+const t1 = new clock('tokei1');
+const t2 = new clock('tokei2');
 
 function init(){
     const h1 = document.getElementById("h1");
@@ -19,8 +19,8 @@ function init(){
     const h2 = document.getElementById("h2");
     const m2 = document.getElementById("m2");
 
-    x.show(h1.value, m1.value);
-    y.show(h2.value, m2.value);
+    t1.show(h1.value, m1.value);
+    t2.show(h2.value, m2.value);
 
     h1.value = 0;
     m1.value = 0;
@@ -36,6 +36,9 @@ function clock(id){
         this.ctx = this.canvas.getContext('2d');
         this.width = this.canvas.width;
         this.height = this.canvas.height;
+
+        // 文字盤の数字の中心までの半径(canvas の半分より少し小さく)
+        this.rads = 93; 
         
         var x = this.ctx;
         x.translate(this.width / 2, this.height / 2); 
@@ -53,8 +56,8 @@ function clock(id){
         for (var i = 0; i < 60; i++) { 
             x.beginPath(); 
             x.rotate(Math.PI/30); 
-            x.moveTo(90,0); 
-            x.lineTo(100,0); 
+            x.moveTo(75,0); 
+            x.lineTo(85,0); 
             x.stroke(); 
         } 
         x.restore();
@@ -62,16 +65,38 @@ function clock(id){
     this.memoriH = function(){
         var x = this.ctx;
         x.save();
-        x.lineWidth = 8; 
+        x.lineWidth = 5; 
         for (var i = 0; i < 12; i++) { 
             x.beginPath(); 
             x.rotate(Math.PI/6); 
-            x.moveTo(80,0); 
-            x.lineTo(100,0); 
+            x.moveTo(65,0); 
+            x.lineTo(85,0); 
             x.stroke(); 
         } 
         x.restore();
     }
+    this.mojiban = function(){
+        // 文字盤
+        var x = this.ctx;
+        x.save();
+        x.rotate(Math.PI/2); 
+        x.font        = "16px 'Arial'";
+        x.textAlign   ="center";
+        x.textBaseline    ="middle";
+        x.fillStyle   = "rgb(0, 0, 0)";
+        x.shadowBlur = 5;
+        x.shadowColor = "#FFF";
+        for (let i = 0; i < 12; i++) {
+            const radian = (i-3) * Math.PI / 6;
+            const xx = this.rads * Math.cos(radian);
+            const yy = this.rads * Math.sin(radian);
+            const text = "" + (i == 0 ? "12" : i);
+            console.log(" mojiban: "+text+", x:"+xx+", y:"+yy);
+            x.fillText(text, xx, yy);
+          }
+        x.restore();
+    }
+
     this.h = function(){
         var x = this.ctx;
         x.save();
@@ -79,7 +104,7 @@ function clock(id){
         x.lineWidth = 8; 
         x.beginPath(); 
         x.moveTo(-5, 0); 
-        x.lineTo(60, 0); 
+        x.lineTo(45, 0); 
         x.stroke(); 
         x.restore();
     }
@@ -90,7 +115,7 @@ function clock(id){
         x.lineWidth = 4; 
         x.beginPath(); 
         x.moveTo(-5, 0); 
-        x.lineTo(80, 0); 
+        x.lineTo(70, 0); 
         x.stroke(); 
         x.restore();
     }
@@ -102,7 +127,7 @@ function clock(id){
         x.lineWidth = 2; 
         x.beginPath(); 
         x.moveTo(-10, 0); 
-        x.lineTo(80, 0); 
+        x.lineTo(70, 0); 
         x.stroke(); 
         x.restore();
     }
@@ -117,8 +142,10 @@ function clock(id){
         }
         var x = this.ctx;
         x.clearRect(-100, -100, 200, 200);
+        this.mojiban();
         this.memoriM();
         this.memoriH();
+
         this.h();
         this.m();
         this.s();

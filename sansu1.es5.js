@@ -126,9 +126,7 @@ var setCountIncriment = function setCountIncriment() {
 };
 
 //maxの数にランダム値を偏らせる
-var randTimeReverse = function randTimeReverse(max) {
-    return Math.floor((1 - Math.random() * Math.random()) * max);
-};
+//const randTimeReverse = (max) => Math.floor( (1 - Math.random() * Math.random()) * max);
 
 function setNewProblem() {
     var operand1 = void 0;
@@ -148,7 +146,7 @@ function setNewProblem() {
         var oldOperand1 = parseInt(elOp1.textContent);
         var oldOperand2 = parseInt(elOp2.textContent);
 
-        for (var i = 0; i < 15; i++) {
+        for (var i = 0; i < 30; i++) {
             console.log("setNewProblem(limit:" + limit + ") i:" + i);
             var random = void 0;
 
@@ -156,14 +154,12 @@ function setNewProblem() {
                 //limitの数字で固定
                 operand1 = limit;
             } else {
-                operand1 = randTimeReverse(limit);
+                //operand1 = randTimeReverse(limit);
+                operand1 = parseInt(Math.random() * Math.pow(10, String(limit).length)) % limit + 1;
             }
 
-            random = Math.random();
-
             //console.log("op2:" + random +", "+parseInt(random * String(limit).length * 10) );
-            operand2 = parseInt(random * String(limit).length * 10) % limit + 1;
-            //console.log( "op1:"+ operand1 + ", op2:"+operand2 );
+            operand2 = parseInt(Math.random() * Math.pow(10, String(limit).length)) % limit + 1;
 
             //if(mode == "-" && operand1 < operand2){
             if (operand1 < operand2) {
@@ -171,9 +167,16 @@ function setNewProblem() {
                 operand1 = operand2;
                 operand2 = tempOperand;
             }
+            //console.log(" ope1: "+operand1+", ope2: "+operand2);
 
             if (operand1 == oldOperand1 && operand2 == oldOperand2) {
-                console.log("reset");
+                console.log(" continue 1");
+            } else if (limit * 0.7 > operand1) {
+                //難しさパラメータ その１
+                console.log(" continue 2 (" + operand1 + ", " + operand2 + ")");
+            } else if (operand1 / 6 > operand2) {
+                //難しさパラメータ その２
+                console.log(" continue 3 (" + operand1 + ", " + operand2 + ")");
             } else {
                 break;
             }

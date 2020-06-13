@@ -252,12 +252,14 @@ function checkCalc(){
     if( document.querySelector("#hissan").checked ){
         hissan = "筆算";
     }
+ 
+    const sec = Math.round((new Date() - intervalStartTime)/1000);
 
     if(mode == "+"){
         try{
             if( (operand1 + operand2) == result){
                 //console.log(" OK");
-                checkOk( getStrForURL([count,hissan,operand1,"＋",operand2, Math.round((intervalStartTime - startTime)/1000) ])
+                checkOk( getStrForURL([count,hissan,operand1,"＋",operand2, sec])
                 );
             }else{
                 console.log(" NG");
@@ -269,7 +271,7 @@ function checkCalc(){
         try{
             if( (operand1 - operand2) == result){
                 //console.log(" OK");
-                checkOk( getStrForURL([count,hissan,operand1,"−",operand2, Math.round((intervalStartTime - startTime)/1000) ]));
+                checkOk( getStrForURL([count,hissan,operand1,"−",operand2, sec]));
             }else{
                 console.log(" NG");
             }
@@ -280,7 +282,7 @@ function checkCalc(){
         try{
             if( (operand1 * operand2) == result){
                 //console.log(" OK");
-                checkOk( getStrForURL([count,hissan,operand1,"x",operand2, Math.round((intervalStartTime - startTime)/1000) ]));
+                checkOk( getStrForURL([count,hissan,operand1,"x",operand2, sec]));
             }else{
                 console.log(" NG");
             }

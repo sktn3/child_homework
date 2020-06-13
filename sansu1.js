@@ -1,4 +1,6 @@
 
+var who = "";
+
 var mode = "+";//足し算,引き算 + or -
 var limit = 1;//数字の上限。０は制限なし。pastは過去問
 var past_num = 0;//過去問の難問目を表示するか
@@ -6,10 +8,11 @@ var limit_mode = false;//第一オペランドの数字を固定するかどう�
 var inputClass = 1;
 
 var startTime;
+var intervalStartTime;
 
 function init(){
     var scrollOff = function( e ){
-	    e.preventDefault();
+        e.preventDefault();
     }
     // スクロールをキャンセル
     document.addEventListener( 'touchmove',scrollOff, false);
@@ -29,6 +32,11 @@ function init(){
         t = now;
     }, false);
 
+
+    //#で別のJSONPを指定可能
+    if( window.location.hash != "" && window.location.hash != "#" ){
+        who = window.location.hash.substring(1);
+    }
 
     setStartTime();
 
@@ -171,6 +179,9 @@ function setNewProblem(){
     elOp2.textContent = operand2;
 
     document.querySelector("#result").textContent = " ";
+
+    intervalStartTime = new Date();
+    changeCursor(0);
 }
 
 function setNum(n){
@@ -222,64 +233,78 @@ function changeCursor(numLen){
 }
 
 function checkCalc(){
-    let elOp1 = document.querySelector("#operand1");
-    let elOp2 = document.querySelector("#operand2");
-    let elRslt = document.querySelector("#result");
-    let elOK = document.querySelector("#ok");
+    console.log(">> checkCalc");
+    const elOp1 = document.querySelector("#operand1");
+    const elOp2 = document.querySelector("#operand2");
+    const elRslt = document.querySelector("#result");
 
-    let operand1 = parseInt( elOp1.textContent );
-    let operand2 = parseInt( elOp2.textContent );
-    let result = parseInt( elRslt.textContent );
+    const operand1 = parseInt( elOp1.textContent );
+    const operand2 = parseInt( elOp2.textContent );
+    const result = parseInt( elRslt.textContent );
+
+    const count = document.querySelector("#count_num").textContent;
+    let hissan = "";
+    if( document.querySelector("#hissan").checked ){
+        hissan = "筆算";
+    }
 
     if(mode == "+"){
         try{
             if( (operand1 + operand2) == result){
-                //console.log("OK");
-                elOK.style.display = "block";
-                ganba_sound();
-                setTimeout(()=>{
-                    elOK.style.display = "none";
-                    setNewProblem();
-                    setCountIncriment();
-                },1000);
+                //console.log(" OK");
+                checkOk( getStrForURL([count,hissan,operand1,"+",operand2, Math.round((intervalStartTime - startTime)/1000) ])
+                );
             }else{
-                //console.log("NG");
+                console.log(" NG");
             }
         }catch(e){
+                console.log(" checkCacl "+e);
         }
     }else if(mode == "-"){
         try{
             if( (operand1 - operand2) == result){
-                //console.log("OK");
-                elOK.style.display = "block";
-                ganba_sound();
-                setTimeout(()=>{
-                    elOK.style.display = "none";
-                    setNewProblem();
-                    setCountIncriment();
-                },1000);
+                //console.log(" OK");
+                checkOk( getStrForURL([count,hissan,operand1,"-",operand2, Math.round((intervalStartTime - startTime)/1000) ]));
             }else{
-                //console.log("NG");
+                console.log(" NG");
             }
         }catch(e){
+                console.log(" checkCacl "+e);
         }
     }else if(mode == "x"){
         try{
             if( (operand1 * operand2) == result){
-                //console.log("OK");
-                elOK.style.display = "block";
-                ganba_sound();
-                setTimeout(()=>{
-                    elOK.style.display = "none";
-                    setNewProblem();
-                    setCountIncriment();
-                },1000);
+                //console.log(" OK");
+                checkOk( getStrForURL([count,hissan,operand1,"x",operand2, Math.round((intervalStartTime - startTime)/1000) ]));
             }else{
-                //console.log("NG");
+                console.log(" NG");
             }
         }catch(e){
+                console.log(" checkCacl "+e);
         }
     }
+}
+
+function getStrForURL(array){
+    console.log(">> getStrForURL " + array);
+    const str = "str="+encodeURIComponent(array.join(","));
+    return str;
+}
+
+function checkOk(sansu1){
+    console.log(">> checkOk");
+
+
+    const elOK = document.querySelector("#ok");
+    elOK.style.display = "block";
+    ganba_sound();
+    setTimeout(()=>{
+        elOK.style.display = "none";
+        setNewProblem();
+        setCountIncriment();
+    },1000);
+
+    access(getURL()+"&"+sansu1);
 }
 
 function setlimit(){
@@ -405,4 +430,21 @@ function audio_sound(id){
 }
 function ganba_sound(){ audio_sound("ganba_sound") }
 function touch_sound(){ audio_sound("touch_sound") }
+
+
+function getURL(){
+    return "https://script.google.com/macros/s/AKfycbzSWGe4qVF3em2ymmuHXc-HLJdewuRX-5xIv0Pj913NuS3JBOvW/exec?type=append&who="+who;
+}
+function access(url){
+    console.log(">> Call access");
+    console.log(" URL " +url);
+
+    const script = document.createElement('script');
+    script.src = url;
+    document.body.appendChild(script);
+
+    window.addEventListener('error', (event) => {
+        console.log(" error access "+event)
+    });
+}
 

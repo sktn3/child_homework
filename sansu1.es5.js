@@ -1,4 +1,6 @@
-'use strict';
+"use strict";
+
+var who = "";
 
 var mode = "+"; //足し算,引き算 + or -
 var limit = 1; //数字の上限。０は制限なし。pastは過去問
@@ -7,6 +9,7 @@ var limit_mode = false; //第一オペランドの数字を固定するかどう
 var inputClass = 1;
 
 var startTime;
+var intervalStartTime;
 
 function init() {
     var scrollOff = function scrollOff(e) {
@@ -31,6 +34,11 @@ function init() {
         }
         t = now;
     }, false);
+
+    //#で別のJSONPを指定可能
+    if (window.location.hash != "" && window.location.hash != "#") {
+        who = window.location.hash.substring(1);
+    }
 
     setStartTime();
 
@@ -176,6 +184,9 @@ function setNewProblem() {
     elOp2.textContent = operand2;
 
     document.querySelector("#result").textContent = " ";
+
+    intervalStartTime = new Date();
+    changeCursor(0);
 }
 
 function setNum(n) {
@@ -231,61 +242,76 @@ function changeCursor(numLen) {
 }
 
 function checkCalc() {
+    console.log(">> checkCalc");
     var elOp1 = document.querySelector("#operand1");
     var elOp2 = document.querySelector("#operand2");
     var elRslt = document.querySelector("#result");
-    var elOK = document.querySelector("#ok");
 
     var operand1 = parseInt(elOp1.textContent);
     var operand2 = parseInt(elOp2.textContent);
     var result = parseInt(elRslt.textContent);
 
+    var count = document.querySelector("#count_num").textContent;
+    var hissan = "";
+    if (document.querySelector("#hissan").checked) {
+        hissan = "筆算";
+    }
+
     if (mode == "+") {
         try {
             if (operand1 + operand2 == result) {
-                //console.log("OK");
-                elOK.style.display = "block";
-                ganba_sound();
-                setTimeout(function () {
-                    elOK.style.display = "none";
-                    setNewProblem();
-                    setCountIncriment();
-                }, 1000);
+                //console.log(" OK");
+                checkOk(getStrForURL([count, hissan, operand1, "+", operand2, Math.round((intervalStartTime - startTime) / 1000)]));
             } else {
-                //console.log("NG");
+                console.log(" NG");
             }
-        } catch (e) {}
+        } catch (e) {
+            console.log(" checkCacl " + e);
+        }
     } else if (mode == "-") {
         try {
             if (operand1 - operand2 == result) {
-                //console.log("OK");
-                elOK.style.display = "block";
-                ganba_sound();
-                setTimeout(function () {
-                    elOK.style.display = "none";
-                    setNewProblem();
-                    setCountIncriment();
-                }, 1000);
+                //console.log(" OK");
+                checkOk(getStrForURL([count, hissan, operand1, "-", operand2, Math.round((intervalStartTime - startTime) / 1000)]));
             } else {
-                //console.log("NG");
+                console.log(" NG");
             }
-        } catch (e) {}
+        } catch (e) {
+            console.log(" checkCacl " + e);
+        }
     } else if (mode == "x") {
         try {
             if (operand1 * operand2 == result) {
-                //console.log("OK");
-                elOK.style.display = "block";
-                ganba_sound();
-                setTimeout(function () {
-                    elOK.style.display = "none";
-                    setNewProblem();
-                    setCountIncriment();
-                }, 1000);
+                //console.log(" OK");
+                checkOk(getStrForURL([count, hissan, operand1, "x", operand2, Math.round((intervalStartTime - startTime) / 1000)]));
             } else {
-                //console.log("NG");
+                console.log(" NG");
             }
-        } catch (e) {}
+        } catch (e) {
+            console.log(" checkCacl " + e);
+        }
     }
+}
+
+function getStrForURL(array) {
+    console.log(">> getStrForURL " + array);
+    var str = "str=" + encodeURIComponent(array.join(","));
+    return str;
+}
+
+function checkOk(sansu1) {
+    console.log(">> checkOk");
+
+    var elOK = document.querySelector("#ok");
+    elOK.style.display = "block";
+    ganba_sound();
+    setTimeout(function () {
+        elOK.style.display = "none";
+        setNewProblem();
+        setCountIncriment();
+    }, 1000);
+
+    access(getURL() + "&" + sansu1);
 }
 
 function setlimit() {
@@ -417,4 +443,20 @@ function ganba_sound() {
 }
 function touch_sound() {
     audio_sound("touch_sound");
+}
+
+function getURL() {
+    return "https://script.google.com/macros/s/AKfycbzSWGe4qVF3em2ymmuHXc-HLJdewuRX-5xIv0Pj913NuS3JBOvW/exec?type=append&who=" + who;
+}
+function access(url) {
+    console.log(">> Call access");
+    console.log(" URL " + url);
+
+    var script = document.createElement('script');
+    script.src = url;
+    document.body.appendChild(script);
+
+    window.addEventListener('error', function (event) {
+        console.log(" error access " + event);
+    });
 }

@@ -252,7 +252,7 @@ function checkCalc() {
     var result = parseInt(elRslt.textContent);
 
     var count = document.querySelector("#count_num").textContent;
-    var hissan = "";
+    var hissan = "no";
     if (document.querySelector("#hissan").checked) {
         hissan = "筆算";
     }
@@ -261,7 +261,7 @@ function checkCalc() {
         try {
             if (operand1 + operand2 == result) {
                 //console.log(" OK");
-                checkOk(getStrForURL([count, hissan, operand1, "+", operand2, Math.round((intervalStartTime - startTime) / 1000)]));
+                checkOk(getStrForURL([count, hissan, operand1, "＋", operand2, Math.round((intervalStartTime - startTime) / 1000)]));
             } else {
                 console.log(" NG");
             }
@@ -272,7 +272,7 @@ function checkCalc() {
         try {
             if (operand1 - operand2 == result) {
                 //console.log(" OK");
-                checkOk(getStrForURL([count, hissan, operand1, "-", operand2, Math.round((intervalStartTime - startTime) / 1000)]));
+                checkOk(getStrForURL([count, hissan, operand1, "−", operand2, Math.round((intervalStartTime - startTime) / 1000)]));
             } else {
                 console.log(" NG");
             }

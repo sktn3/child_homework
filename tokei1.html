@@ -62,6 +62,26 @@ function random2(){
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
 }
+function random3(){
+    const hour = Math.round( Math.random()*9 );
+    const interval = Math.round( Math.random() ) +1;
+    const min1 = Math.round( Math.random()*12 ) *5;
+    const min2 = Math.round( Math.random()*12 ) *5;
+
+    t1.show(hour, min1);
+    t2.show(hour+interval, min2);
+    //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
+}
+function random4(){
+    const hour = Math.round( Math.random()*9 );
+    const interval = Math.round( Math.random()*2 )-1;
+    const min1 = Math.round( Math.random()*12 ) *5;
+    const min2 = Math.round( Math.random()*12 ) *5;
+
+    t1.show(hour, min1);
+    t2.show(hour+interval, min2);
+    //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
+}
 
 function clock(id){
     this.id = id;
@@ -240,7 +260,15 @@ function clock(id){
 <br/>
 <input type=button width=20 height=5 class="btn" value="ランダムに変える（レベル２）" onclick="random2()">
 左時計より、右時計は未来になる（はず）。０分、１０分、２０分、３０分、４０分、５０分
+<br/>
+<br/>
+<input type=button width=20 height=5 class="btn" value="ランダムに変える（レベル３）" onclick="random3()">
+左時計より、右時計は未来になる（はず）。５分刻み。
 
+<br/>
+<br/>
+<input type=button width=20 height=5 class="btn" value="ランダムに変える（レベル４）" onclick="random4()">
+左時計より、右時計は未来になるとは限らない。５分刻み。
 </body>
 
 </html>

@@ -28,6 +28,68 @@ function init(){
     t1.show(h1.value, m1.value);
     t2.show(h2.value, m2.value);
 }
+
+function hideAnswer(){
+    const ans = document.getElementById("answer");
+    ans.style.display = 'none';
+}
+function showAnswer(){
+    const ans = document.getElementById("answer");
+    ans.style.display = 'block';
+}
+function setAnswer(h1,m1,h2,m2){
+    hideAnswer();
+
+    if(m1 == 60){
+        m1 = 0;
+        h1 = h1+1;
+    }
+    if(h1 < 0){
+        h1 = 12 + h1
+    }
+    if(m2 == 60){
+        m2 = 0;
+        h2 = h2+1;
+    }
+    if(h2 < 0){
+        h2 = 12 + h2
+    }
+
+    const t1 = h1*60+m1;
+    const t2 = h2*60+m2;
+    const a1 = t2-t1;
+    //const ah = Math.floor(a1/60);
+    const ah = parseInt(a1/60);
+    const am = a1%60;
+
+    const hh1 = document.getElementById("hh1");
+    const mm1 = document.getElementById("mm1");
+    const hh2 = document.getElementById("hh2");
+    const mm2 = document.getElementById("mm2");
+
+    const hh3 = document.getElementById("hh3");
+    const mm3 = document.getElementById("mm3");
+    const zengo = document.getElementById("zengo");
+
+    console.log(">> Call setAnswer");
+    console.log(" "+h1+":"+m1+" -> "+h2+":"+m2);
+    console.log(" answer"+ah+":"+am);
+
+    hh1.innerHTML = h1;
+    mm1.innerHTML = ("0"+m1).slice(-2);
+    hh2.innerHTML = h2;
+    mm2.innerHTML = ("0"+m2).slice(-2);
+    if(a1 >=0){
+        hh3.innerHTML = ah;
+        mm3.innerHTML = ("0"+am).slice(-2);
+        zengo.innerHTML = "後";
+    }else{
+        hh3.innerHTML = -1*ah;
+        mm3.innerHTML = ("0"+(-1*am)).slice(-2);
+        zengo.innerHTML = "前";
+    }
+}
+
 function change(){
     const h1 = document.getElementById("h1");
     const m1 = document.getElementById("m1");
@@ -41,6 +103,8 @@ function change(){
     m1.value = 0;
     h2.value = 0;
     m2.value = 0;
+
+    setAnswer(h1,m1,h2,m2);
 }
 function random1(){
     const hour = Math.round( Math.random()*9 );
@@ -51,6 +115,7 @@ function random1(){
     t1.show(hour, min1);
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
+    setAnswer(hour,min1,hour+interval,min2);
 }
 function random2(){
     const hour = Math.round( Math.random()*9 );
@@ -61,6 +126,7 @@ function random2(){
     t1.show(hour, min1);
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
+    setAnswer(hour,min1,hour+interval,min2);
 }
 function random3(){
     const hour = Math.round( Math.random()*9 );
@@ -71,6 +137,7 @@ function random3(){
     t1.show(hour, min1);
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
+    setAnswer(hour,min1,hour+interval,min2);
 }
 function random4(){
     const hour = Math.round( Math.random()*9 );
@@ -81,6 +148,7 @@ function random4(){
     t1.show(hour, min1);
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
+    setAnswer(hour,min1,hour+interval,min2);
 }
 
 function clock(id){
@@ -237,19 +305,45 @@ function clock(id){
 .space{
     font-size: min(5vh,5vw);
 }
+
+.answer{
+    display: none;
+
+    position: absolute;
+    top: 1vh;
+    height: 60vh;
+    left: 1vw;
+    width: 90vw;
+
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.3);
+
+    font-size: min(5vh,5vw);
+    font-weight: bolder;
+    text-shadow: 1px 1px 1px black;
+    color: white;
+
+    border: 1px solid #333;
+    border-radius: 20px;/*角の丸み*/
+    -webkit-border-radius: 20px;/* for Safari and Chrome 対応*/
+    -moz-border-radius: 20px;/* for Firefox 対応*/
+}
 </style>
 
 </head>
 
 <body onload="init()">
-左時計より、右時計は何時間何分...？<br>
+左時計より、右時計は何時間何分...？
+<span class="space">　　　　　</span>
+<input type=button width=15 height=3 class="btn" value="答えを見る" onclick="showAnswer()">
+<br>
 <canvas id="tokei1" width="400" height="400"></canvas>
 <span id="allow" class="allow">➡︎</span>
 <canvas id="tokei2" width="400" height="400"></canvas>
 <br>
-<input type=number id=h1 width=10 value=7>：<input type=number id=m1 width=10 value=30>
+<input type=number id=h1 width=10 value=0>：<input type=number id=m1 width=10 value=0>
 <span class="space">　　　　　</span>
-<input type=number id=h2 width=10 value=8>：<input type=number id=m2 width=10 value=30>
+<input type=number id=h2 width=10 value=0>：<input type=number id=m2 width=10 value=0>
 <input type=button width=20 height=5 value="変更" onclick="change()">
 <br/>
 <br/>
@@ -269,6 +363,23 @@ function clock(id){
 <br/>
 <input type=button width=20 height=5 class="btn" value="ランダムに変える（レベル４）" onclick="random4()">
 左時計より、右時計は未来になるとは限らない。５分刻み。
+
+
+<div id="answer" class="answer" onclick="hideAnswer();">
+
+    <br>
+    <br>
+    <br>
+    右　<span id="hh1">--</span>：<span id="mm1">--</span>
+    <span class="space">　　➡︎　　</span>
+    左　<span id="hh2">--</span>：<span id="mm2">--</span>
+    <br>
+    <br>
+    <br>
+
+    答えは、<span id="hh3">--</span>：<span id="mm3">--</span> <span id="zengo">-</span>
+<div>
+
 </body>
 
 </html>

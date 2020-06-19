@@ -13,6 +13,8 @@
 const t1 = new clock('tokei1');
 const t2 = new clock('tokei2');
 
+let nextProblem = null;
+
 function init(){
     document.addEventListener('touchstart', function(event){
         const a = document.getElementById("allow");
@@ -29,6 +31,14 @@ function init(){
     t2.show(h2.value, m2.value);
 }
 
+function closeAnswer(){
+    //console.log(">> Call closeAnswer");
+    hideAnswer();
+    //console.log(" "+ typeof nextProblem);
+    if( typeof nextProblem == "function"){
+        nextProblem();
+    }
+}
 function hideAnswer(){
     const ans = document.getElementById("answer");
     ans.style.display = 'none';
@@ -116,6 +126,8 @@ function random1(){
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
     setAnswer(hour,min1,hour+interval,min2);
+
+    nextProblem = random1;
 }
 function random2(){
     const hour = Math.round( Math.random()*9 );
@@ -127,6 +139,8 @@ function random2(){
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
     setAnswer(hour,min1,hour+interval,min2);
+
+    nextProblem = random2;
 }
 function random3(){
     const hour = Math.round( Math.random()*9 );
@@ -138,6 +152,8 @@ function random3(){
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
     setAnswer(hour,min1,hour+interval,min2);
+
+    nextProblem = random3;
 }
 function random4(){
     const hour = Math.round( Math.random()*9 );
@@ -149,6 +165,8 @@ function random4(){
     t2.show(hour+interval, min2);
     //console.log("hour:"+hour+", interval:"+interval+", min:"+min);
     setAnswer(hour,min1,hour+interval,min2);
+
+    nextProblem = random4;
 }
 
 function clock(id){
@@ -214,7 +232,7 @@ function clock(id){
             const xx = this.rads * Math.cos(radian);
             const yy = this.rads * Math.sin(radian);
             const text = "" + (i == 0 ? "12" : i);
-            console.log(" mojiban: "+text+", x:"+xx+", y:"+yy);
+            //console.log(" mojiban: "+text+", x:"+xx+", y:"+yy);
             x.fillText(text, xx, yy);
           }
         x.restore();
@@ -315,7 +333,7 @@ function clock(id){
     left: 1vw;
     width: 90vw;
 
-    padding: 20px;
+    padding: 10px;
     background-color: rgba(0, 0, 0, 0.3);
 
     font-size: min(5vh,5vw);
@@ -327,6 +345,22 @@ function clock(id){
     border-radius: 20px;/*角の丸み*/
     -webkit-border-radius: 20px;/* for Safari and Chrome 対応*/
     -moz-border-radius: 20px;/* for Firefox 対応*/
+}
+.close{
+    border: 2px solid white;
+    padding: 0px 8px 8px 8px;
+    background-color: rgba(0, 0, 0, 0.35);
+}
+.next{
+    content: '';
+    width: 24px;            /* ボックスの横幅 */
+    height: 24px;            /* ボックスの縦幅 */
+    background-color: #fff;
+    box-shadow: inset 1px 2px 3px 0px #000;
+    border-radius: 6px 6px 6px 6px;
+}
+.nextlabel{
+    font-size: min(3vh,3vw);
 }
 </style>
 
@@ -344,7 +378,7 @@ function clock(id){
 <input type=number id=h1 width=10 value=0>：<input type=number id=m1 width=10 value=0>
 <span class="space">　　　　　</span>
 <input type=number id=h2 width=10 value=0>：<input type=number id=m2 width=10 value=0>
-<input type=button width=20 height=5 value="変更" onclick="change()">
+<input type=button width=20 height=5 value="指定" onclick="change()">
 <hr>
 <input type=button width=20 height=5 class="btn" value="ランダムに変える（レベル１）" onclick="random1()">
 左時計より、右時計は未来になる（はず）。０分か３０分のみ。
@@ -359,8 +393,12 @@ function clock(id){
 左時計より、右時計は未来になるとは限らない。５分刻み。
 
 
-<div id="answer" class="answer" onclick="hideAnswer();">
+<div id="answer" class="answer">
 
+    <span id="close" class="close" onclick="closeAnswer()">×</span>
+    <span class="space">　　</span>
+    <input id="next" type="checkbox" class="next" checked></input>
+    <label class="nextlabel" for="next">閉じたら、自動で次の問題にする</label>
     <br>
     <br>
     <br>
@@ -370,7 +408,7 @@ function clock(id){
     <br>
     <br>
     <br>
-
+    <span class="space">　　　　　</span>
     答えは、<span id="hh3">--</span>：<span id="mm3">--</span> <span id="zengo">-</span>
 <div>
 

@@ -32,10 +32,11 @@ function init(){
 }
 
 function closeAnswer(){
+    const next = document.getElementById("next");
     //console.log(">> Call closeAnswer");
     hideAnswer();
     //console.log(" "+ typeof nextProblem);
-    if( typeof nextProblem == "function"){
+    if( typeof nextProblem == "function" && next.checked){
         nextProblem();
     }
 }

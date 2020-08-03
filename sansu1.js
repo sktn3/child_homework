@@ -84,7 +84,10 @@ function init(){
     audio = document.getElementById("touch_sound");
     try{ audio.load(); audio.play(); }catch(e){}
 
+
     document.body.style.display = "block";
+    changeCursor(0);
+
 }
 
 function setStartTime(){
@@ -233,8 +236,14 @@ function changeCursor(numLen){
     console.log("numLen: "+ numLen);
     console.log("ResultWhidth: "+ w);
 
+    const elRslt = document.querySelector("#result");
     const elRsltCsr = document.querySelector("#result_cursor");
     elRsltCsr.style.width = String(w)+"px";
+
+    elRsltCsr.style.top = String(elRslt.offsetTop) + "px";
+    elRsltCsr.style.left = String(elRslt.offsetLeft) + "px";
+    elRsltCsr.style.height = String(elRslt.offsetHeight) + "px";
+
 }
 
 function checkCalc(){
@@ -359,15 +368,15 @@ function setmode(){
     try{ touch_sound(); }catch(e){}
 }
 function sethissan(){
-    let elHissan = document.querySelector("#hissan");
-    let elPrb = document.querySelector("#problem");
-    let elOp = document.querySelector("#operator");
-    let elOp1 = document.querySelector("#operand1");
-    let elOp2 = document.querySelector("#operand2");
-    let elBar = document.querySelector("#bar");
-    let elEq = document.querySelector("#equal");
-    let elRslt = document.querySelector("#result");
-    let elRsltCsr = document.querySelector("#result_cursor");
+    const elHissan = document.querySelector("#hissan");
+    const elPrb = document.querySelector("#problem");
+    const elOp = document.querySelector("#operator");
+    const elOp1 = document.querySelector("#operand1");
+    const elOp2 = document.querySelector("#operand2");
+    const elBar = document.querySelector("#bar");
+    const elEq = document.querySelector("#equal");
+    const elRslt = document.querySelector("#result");
+    const elRsltCsr = document.querySelector("#result_cursor");
 
     if(elHissan.checked){
         elPrb.classList.remove("problem");
@@ -391,8 +400,8 @@ function sethissan(){
         elRslt.classList.remove("result");
         elRslt.classList.add("resulthissan");
 
-        elRsltCsr.classList.remove("result");
-        elRsltCsr.classList.add("resulthissan");
+        //elRsltCsr.classList.remove("result");
+        //elRsltCsr.classList.add("resulthissan");
 
         localStorage.setItem('sansu1_hissan',"true");
     }else{
@@ -417,11 +426,13 @@ function sethissan(){
         elRslt.classList.remove("resulthissan");
         elRslt.classList.add("result");
 
-        elRsltCsr.classList.remove("resulthissan");
-        elRsltCsr.classList.add("result");
+        //elRsltCsr.classList.remove("resulthissan");
+        //elRsltCsr.classList.add("result");
 
         localStorage.setItem('sansu1_hissan',"false");
     }
+
+    changeCursor(0);
 
     try{ touch_sound(); }catch(e){}
 }

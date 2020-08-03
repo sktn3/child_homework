@@ -88,6 +88,7 @@ function init() {
     } catch (e) {}
 
     document.body.style.display = "block";
+    changeCursor(0);
 }
 
 function setStartTime() {
@@ -240,8 +241,13 @@ function changeCursor(numLen) {
     console.log("numLen: " + numLen);
     console.log("ResultWhidth: " + w);
 
+    var elRslt = document.querySelector("#result");
     var elRsltCsr = document.querySelector("#result_cursor");
     elRsltCsr.style.width = String(w) + "px";
+
+    elRsltCsr.style.top = String(elRslt.offsetTop) + "px";
+    elRsltCsr.style.left = String(elRslt.offsetLeft) + "px";
+    elRsltCsr.style.height = String(elRslt.offsetHeight) + "px";
 }
 
 function checkCalc() {
@@ -398,8 +404,8 @@ function sethissan() {
         elRslt.classList.remove("result");
         elRslt.classList.add("resulthissan");
 
-        elRsltCsr.classList.remove("result");
-        elRsltCsr.classList.add("resulthissan");
+        //elRsltCsr.classList.remove("result");
+        //elRsltCsr.classList.add("resulthissan");
 
         localStorage.setItem('sansu1_hissan', "true");
     } else {
@@ -424,11 +430,13 @@ function sethissan() {
         elRslt.classList.remove("resulthissan");
         elRslt.classList.add("result");
 
-        elRsltCsr.classList.remove("resulthissan");
-        elRsltCsr.classList.add("result");
+        //elRsltCsr.classList.remove("resulthissan");
+        //elRsltCsr.classList.add("result");
 
         localStorage.setItem('sansu1_hissan', "false");
     }
+
+    changeCursor(0);
 
     try {
         touch_sound();

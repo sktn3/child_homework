@@ -1,0 +1,58 @@
+
+
+
+# -> ~/.config/git/ignore
+
+.gitignore
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+/tmp/*
+/work/*
+/bin/*
+.DS_Store
+
+# 拡張子なし
+*
+!*/
+!*.*
+
+# Ignore other unneeded files.
+doc/
+.project
+.DS_Store
+.idea
+.secret
+Icon?
+*.[aod]
+*.bin
+*.lock
+.*.json
+Thumbs.db
+
+# clasp
+.clasp.json
+
+# Vim
+*.swp
+*~
+
+# npm
+package-lock.*
+
+# Emacsの自動保存ファイルを無視する
+\#*#
+
+# rust
+*.timestamp
+*.rmeta
+*.rlib
+*.dylib
+*.dSYM
+*.ll
+*script-build.json
+lib*-*.json
+build*-*.json
+*bin*-*.json
+

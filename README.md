@@ -4,6 +4,11 @@
 公開
 https://sktn3.github.io/child_homework/sansu1.html
 
+- UIの注意事項
+  - 数字は下桁から入ります
+    - 例えば、21を入力する場合、１→２の順番に入力してください
+    - 暗算する際に、１桁目から考えてもらうためです 
+
 - HTML+JSのみで稼働
 	- 以下をAWS S3等に置きブラウザで開くだけで使えます
 		- sansu1.html

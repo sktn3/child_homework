@@ -52,7 +52,7 @@ function init(){
         inputClass = nextInputClass;
 
         setElapsedTime();
-    },500);
+    },700);
 
     //localStorageから前回指定値を入手
     let val = localStorage.getItem('sansu1_limit');
